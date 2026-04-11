@@ -1,11 +1,14 @@
 from fastapi import FastAPI 
 from src.core.config import settings
+from src.routers import auth
 
 app= FastAPI(
     title= settings.APP_NAME,
     description= "The entry point for CodePulse AI DevOps Platform",
     version= "0.1.0"
 )
+
+app.include_router(auth.router)
 
 @app.get("/health", tags=["System"])
 async def health_check():
