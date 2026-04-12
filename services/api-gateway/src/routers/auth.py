@@ -20,7 +20,7 @@ async def login():
     url= f"{GITHUB_AUTH_URL}?client_id={settings.GITHUB_CLIENT_ID}&scope=user:email"
     return RedirectResponse(url)
 
-@router.get("/github/callback")
+@router.get("/callback")
 async def github_callback(code: str, db: AsyncSession= Depends(get_db)):
     """Step 2 & 3: Exchange code for token and get user profile"""
     if not code:

@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "dev_secret_key_change_in_production"
     JWT_ALGORITHM: str = "HS256"
 
+    ACCESS_TOKEN_EXPIRE_MINUTES: int= 60
+    
     model_config = SettingsConfigDict(
         env_file = os.path.join(ROOT_DIR, ".env"),
         extra = "ignore"
