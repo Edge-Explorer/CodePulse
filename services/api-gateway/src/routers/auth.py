@@ -6,6 +6,7 @@ from src.models.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
 import httpx
 from fastapi.responses import RedirectResponse
+from src.core.security import create_access_token
 
 router= APIRouter(prefix= "/auth", tags= ["Authentication"])
 
@@ -70,9 +71,15 @@ async def github_callback(code: str, db: AsyncSession= Depends(get_db)):
 
     await db.commit()
     await db.refresh(user)
+    
+    access_token= create_access_token(
+        data={"sub": str(user.id), "username": user.username}
+    )
 
     return {
         "message": "User saved and authenticated!",
+        "access_token": access_token,
+        "token_type": "bearer",
         "user_id": user.id,
         "username": user.username
     }
