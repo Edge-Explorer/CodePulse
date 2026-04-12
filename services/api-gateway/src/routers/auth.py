@@ -1,5 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from src.core.config import settings
+from sqlalchemy import select
+from src.core.database import get_db
+from src.models.user import User
+from sqlalchemy.ext.asyncio import AsyncSession
 import httpx
 from fastapi.responses import RedirectResponse
 
@@ -16,7 +20,7 @@ async def login():
     return RedirectResponse(url)
 
 @router.get("/github/callback")
-async def github_callback(code: str):
+async def github_callback(code: str, db: AsyncSession= Depends(get_db)):
     """Step 2 & 3: Exchange code for token and get user profile"""
     if not code:
         raise HTTPException(status_code= 400, detail= "Authorization code missing")
@@ -46,9 +50,29 @@ async def github_callback(code: str):
             }
         )
         user_data= user_response.json()
+
+    query= select(User).where(User.github_id == str(user_data["id"]))
+    result= await db.execute(query)
+    user= result.scalars().first()
+
+    if user:
+        user.username= user_data["login"]
+        user.avatar_url= user_data["avatar_url"]
+        user.email= user_data.get("email")
+    else:
+        user= User(
+            github_id= str(user_data["id"]),
+            username= user_data["login"],
+            email= user_data.get("email"),
+            avatar_url= user_data["avatar_url"]
+        )
+        db.add(user)
+
+    await db.commit()
+    await db.refresh(user)
+
     return {
-        "message": "Successfully authenticated!",
-        "github_user": user_data["login"],
-        "email": user_data.get("email"),
-        "avatar": user_data.get("avatar_url")
+        "message": "User saved and authenticated!",
+        "user_id": user.id,
+        "username": user.username
     }
