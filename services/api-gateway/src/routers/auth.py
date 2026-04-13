@@ -14,11 +14,15 @@ GITHUB_AUTH_URL= "https://github.com/login/oauth/authorize"
 GITHUB_TOKEN_URL= "https://github.com/login/oauth/access_token"
 GITHUB_USER_URL= "https://api.github.com/user"
 
-@router.get("/login")
+@router.get("/github/login")
 async def login():
     """Step 1: Redirect user to GitHub's permission page"""
-    url= f"{GITHUB_AUTH_URL}?client_id={settings.GITHUB_CLIENT_ID}&scope=user:email"
-    return RedirectResponse(url)
+    github_url = (
+        f"https://github.com/login/oauth/authorize?"
+        f"client_id={settings.GITHUB_CLIENT_ID}&"
+        f"scope=user:email repo"
+    )
+    return RedirectResponse(url=github_url)
 
 @router.get("/callback")
 async def github_callback(code: str, db: AsyncSession= Depends(get_db)):
