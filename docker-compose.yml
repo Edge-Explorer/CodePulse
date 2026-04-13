@@ -1,6 +1,6 @@
 services:
   kafka:
-    image: confluentinc/cp-kafka:latest # Use the image already have!
+    image: confluentinc/cp-kafka:latest # Use the image you already have!
     container_name: codepulse-kafka-1
     ports:
       - "9092:9092"
