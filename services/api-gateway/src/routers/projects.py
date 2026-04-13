@@ -6,7 +6,8 @@ from src.core.database import get_db
 from src.core.dependencies import get_current_user
 from src.models.user import User
 from src.models.project import Project
-from src.schemas.project import ProjectCreate # Make sure setting this name in schemas!
+from src.schemas.project import ProjectCreate 
+from src.core.kafka import send_task
 
 # 1. Define the router!
 router = APIRouter(prefix="/projects", tags=["Projects"])
@@ -40,8 +41,16 @@ async def create_project(
         owner_id=current_user.id
     )
     
+    task_data= {
+        "project_id": new_project.id,
+        "repo_url": new_project.repo_url,
+        "language": new_project.language,
+        "user_id": current_user.id
+    }
+
     db.add(new_project)
     await db.commit()
     await db.refresh(new_project)
+    await send_task("project_scans", task_data)
 
     return new_project
