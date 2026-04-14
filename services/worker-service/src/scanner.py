@@ -3,7 +3,7 @@ import shutil
 import tempfile
 import logging
 import google.generativeai as genai 
-import typing import Dict, Any 
+from typing import Dict, Any 
 
 class AIScanner:
     def __init__(self, api_key: str):
@@ -27,11 +27,16 @@ class AIScanner:
                 return {"error": "This repository is empty or has no code files!"}
 
             # The Prompt: Tells Gemini exactly how to act
-            prompt= f"Analyse this repository code for Security Bugs and Architecture quality. Return JSON only. \n\n
-            {code_context[:30000]}"
+            prompt = f"""
+            Analyse this repository code for Security Bugs and Architecture quality. 
+            Return the results in a professional JSON format.
+            
+            Code Context:
+            {code_context[:30000]}
+            """
 
-            response= self.model.generative_content(prompt)
-            return("raw_report": response.text, "status": "success")
+            response= self.model.generate_content(prompt)
+            return {"raw_report": response.text, "status": "success"}
 
         finally:
             # We destroy the temporary code room to keep your computer clean
@@ -40,8 +45,8 @@ class AIScanner:
     def _get_code_context(self, path: str) -> str:
         """Helper to read code files (.py, .js, etc.)"""
         context= ""
-        exts= ('.py', '.js', '.ts', '.go', '.java')
-        for root, _, files in os.with(path):
+        exts = ('.py', '.js', '.ts', '.go', '.java', '.rs', '.ps1', '.ipynb', '.cpp', '.h', '.c', '.sh', '.yaml', '.yml', '.md', '.json')
+        for root, _, files in os.walk(path):
             for file in files:
                 if file.endswith(exts):
                     with open(os.path.join(root, file), 'r', encoding= 'utf-8', errors= 'ignore') as f:
