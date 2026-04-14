@@ -41,6 +41,10 @@ async def create_project(
         owner_id=current_user.id
     )
     
+    db.add(new_project)
+    await db.commit()
+    await db.refresh(new_project)
+
     task_data= {
         "project_id": new_project.id,
         "repo_url": new_project.repo_url,
@@ -48,9 +52,5 @@ async def create_project(
         "user_id": current_user.id
     }
 
-    db.add(new_project)
-    await db.commit()
-    await db.refresh(new_project)
     await send_task("project_scans", task_data)
-
     return new_project

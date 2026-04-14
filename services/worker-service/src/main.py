@@ -4,6 +4,8 @@ import logging
 from aiokafka import AIOKafkaConsumer
 from src.scanner import AIScanner
 from src.config import settings
+from src.database import SessionLocal
+from src.models import ScanReport
 
 logging.basicConfig(level= logging.INFO)
 
@@ -34,11 +36,16 @@ async def consume():
 
             if "error" in report:
                 logging.error(f"SCAN FAILED: {report['error']}")
-            else:
-                logging.info(f"SCAN COMPLETE for Project {project_id}!")
-                print("\n--- AI REPORT ---")
-                print(report["raw_report"])
-                print("-----------------\n")
+                continue
+            # 3. SAVE TO DATABASE
+            async with SessionLocal() as db:
+                new_report= ScanReport(
+                    project_id= project_id,
+                    report_data= report["raw_report"]
+                )
+                db.add(new_report)
+                await db.commit()
+                logging.info(f"REPORT SAVED TO DB FOR PROJECT {project_id}!")
 
     finally:
         await consumer.stop()
