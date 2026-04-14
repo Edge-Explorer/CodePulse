@@ -37,8 +37,8 @@ class AIScanner:
 
             response= self.client.models.generate_content(
                 model= "gemini-2.0-flash",
-                contents= prompt
-                )
+                contents= prompt,
+            )
             
             return {"raw_report": response.text, "status": "success"}
     
