@@ -17,7 +17,7 @@ spec:
       containers:
       - name: api-gateway
         image: codepulse-api:latest
-        imagePullPolicy: AfterChecks  # Or 'Never' if testing locally
+        imagePullPolicy: AfterChecks
         ports:
         - containerPort: 8000
         env:
@@ -28,3 +28,18 @@ spec:
               key: DATABASE_URL
         - name: KAFKA_BOOTSTRAP_SERVERS
           value: "kafka-service:9092"
+        - name: GITHUB_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: codepulse-secrets
+              key: GITHUB_CLIENT_ID
+        - name: GITHUB_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: codepulse-secrets
+              key: GITHUB_CLIENT_SECRET
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: codepulse-secrets
+              key: JWT_SECRET

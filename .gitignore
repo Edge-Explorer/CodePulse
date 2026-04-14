@@ -85,3 +85,4 @@ Thumbs.db
 # Ignore secrets manifests that might contain real data
 k8s/**/*secret.yaml
 k8s/**/secrets/*.yaml
+secrets.yaml
