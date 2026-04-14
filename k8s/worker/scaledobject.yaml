@@ -1,0 +1,17 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: worker-scaler
+spec:
+  scaleTargetRef:
+    name: worker-service   # 1. WHO to scale? (The Worker)
+  miniReplicaCount: 1   # 2. Minimum workers (Keep 1 alive)
+  maxReplicaCount: 10   # 3. Maximum workers (Don't spend too much money!)
+  triggers:
+  - type: kafka     # 4. WHAT is the trigger? (Kafka messages)
+    metadata:
+      topic: project_scans
+      bootstrapServers: kafka-service:9092
+      consumerGroup: scan_workers
+      # 5. SCALE UP if more than 5 messages are waiting per worker!
+      lagThreshold: "5"
