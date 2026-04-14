@@ -12,9 +12,11 @@ async def consume():
     scanner= AIScanner(api_key= settings.GEMINI_API_KEY)
     consumer= AIOKafkaConsumer(
         "project_scans",
-        bootstrap_servers= '127.0.0.1:9092',
+        bootstrap_servers= settings.KAFKA_BOOTSTRAP_SERVERS,
         group_id= "scan_workers",
-        value_deserializer= lambda m: json.loads(m.decode('utf-8'))
+        value_deserializer= lambda m: json.loads(m.decode('utf-8')),
+        max_poll_interval_ms= 300000,
+        session_timeout_ms= 30000
     )
 
     await consumer.start()

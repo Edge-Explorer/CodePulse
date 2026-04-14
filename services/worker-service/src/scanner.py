@@ -4,6 +4,7 @@ import tempfile
 import logging
 import google.generativeai as genai 
 from typing import Dict, Any 
+import stat 
 
 class AIScanner:
     def __init__(self, api_key: str):
@@ -37,10 +38,10 @@ class AIScanner:
 
             response= self.model.generate_content(prompt)
             return {"raw_report": response.text, "status": "success"}
-
+    
         finally:
             # We destroy the temporary code room to keep your computer clean
-            shutil.rmtree(temp_dir)
+            shutil.rmtree(temp_dir, onerror= on_rm_error)
 
     def _get_code_context(self, path: str) -> str:
         """Helper to read code files (.py, .js, etc.)"""
@@ -53,3 +54,7 @@ class AIScanner:
                         context += f"\n-- {file} ---\n{f.read()}\n"
         
         return context
+
+def  on_rm_error(func, path, exc_info):
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
