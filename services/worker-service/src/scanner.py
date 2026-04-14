@@ -2,14 +2,13 @@ import os
 import shutil
 import tempfile
 import logging
-import google.generativeai as genai 
+from google import genai 
 from typing import Dict, Any 
 import stat 
 
 class AIScanner:
     def __init__(self, api_key: str):
-        genai.configure(api_key= api_key)
-        self.model= genai.GenerativeModel('gemini-2.0-flash')
+        self.client= genai.Client(api_key= api_key)
 
     async def scan_repo(self, repo_url: str) -> Dict[str, Any]:
         """Clones a repo and lets Gemini analyze it"""
@@ -36,7 +35,11 @@ class AIScanner:
             {code_context[:30000]}
             """
 
-            response= self.model.generate_content(prompt)
+            response= self.client.models.generate_content(
+                model= "gemini-2.0-flash",
+                contents= prompt
+                )
+            
             return {"raw_report": response.text, "status": "success"}
     
         finally:
