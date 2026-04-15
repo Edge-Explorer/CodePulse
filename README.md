@@ -1,79 +1,101 @@
 # CodePulse
 
-CodePulse is a production-grade AI-powered DevOps platform that automates the process of code review, security analysis, and repository health assessment. It is designed to handle high-concurrency workloads at scale, processing thousands of simultaneous repository analysis requests without degradation in performance or reliability.
+> **Learning Project Notice:** This is my first microservices project. I am actively learning Docker, Kubernetes, and event-driven architecture while building this. The code is functional and the cluster runs locally, but I am still deepening my understanding of how every piece fits together. This README documents both what I built and what I learned along the way.
+
+---
+
+CodePulse is an AI-powered DevOps platform that automates code review, security analysis, and repository health assessment. I built this to understand what a production-grade backend architecture actually looks like — moving away from single-folder monolith FastAPI apps into a properly structured, containerized, and orchestrated microservices system.
+
+## What I Learned While Building This
+
+Coming from writing simple single-file FastAPI applications, this project taught me:
+
+- **Why microservices?** Instead of one large application crashing entirely when one feature breaks, each service (API Gateway, Worker) runs independently. If one pod crashes, Kubernetes restarts it while the other keeps serving traffic.
+- **Why Kafka?** The API Gateway does not perform the heavy AI analysis itself. It publishes a message to a Kafka topic, and the Worker Service picks it up asynchronously. This means thousands of users can submit requests without the API server becoming a bottleneck.
+- **Why Docker?** Instead of environment-specific bugs, Docker packages the application and its entire runtime environment into a portable container image that behaves identically everywhere.
+- **Why Kubernetes?** Docker runs a single container. Kubernetes manages a fleet of containers — restarting crashed ones, load-balancing traffic across replicas, and scaling based on demand.
+- **Why replicas?** Running 2 copies of the API Gateway means if one pod crashes, users are instantly routed to the second one. No downtime. This is called High Availability.
+
+## Current Status
+
+All services are successfully deployed in a local Kubernetes cluster running on Docker Desktop.
+
+| Service | Status | Description |
+|---|---|---|
+| API Gateway | Running (2 replicas) | FastAPI, handles auth and project submission |
+| Worker Service | Running | Consumes Kafka tasks, runs Gemini AI scans |
+| Kafka Broker | Running | Message queue between the API and Worker |
+| Zookeeper | Running | Coordination layer for Kafka |
 
 ## What It Does
 
-### Automated Code Review
-CodePulse accepts a GitHub repository URL or a direct upload and runs a comprehensive AI-powered review using Google Gemini 2.0 Flash. The review covers code quality, logic errors, anti-patterns, and architectural concerns. Unlike a simple AI prompt, the analysis is structured, grounded in the actual repository content, and stored persistently so teams can track code quality improvements over time.
+**GitHub OAuth Login** — Users authenticate with their GitHub account. The platform issues a signed JWT for subsequent API requests.
 
-### Security Scanning
-The platform performs automated security analysis on every submitted repository. It identifies common vulnerabilities such as hardcoded credentials, insecure dependency versions, SQL injection risks, and improper error handling. Each finding is accompanied by a detailed explanation of the risk and a suggested remediation, rather than a generic warning.
+**Submit a Repository** — The user POSTs a GitHub repository URL. The API validates the request, persists the project to PostgreSQL, and publishes a scan task to Kafka.
 
-### Refactoring Suggestions
-CodePulse generates concrete refactoring recommendations for submitted code. This includes suggestions around naming conventions, function decomposition, modern language idioms, and design patterns. The intent is to help developers write code that is not only functional but maintainable and readable at a team level.
+**Asynchronous AI Scan** — The Worker Service consumes the task from Kafka, clones the repository, reads the source files, and sends them to Google Gemini 2.0 Flash for a structured security and architecture analysis.
 
-### Asynchronous Job Processing
-All analysis tasks are processed asynchronously. When a user submits a repository, the platform immediately acknowledges the request and queues the analysis job. The user can track the status of their job in real time through the dashboard. This architecture ensures the platform remains responsive regardless of how many analysis jobs are in flight simultaneously.
-
-### Versioned Analysis History
-Every analysis result is stored against a specific commit SHA. This means users can compare the security and quality state of their repository across commits and pull requests, creating a verifiable audit trail of code health over time.
-
-### Event-Driven Architecture
-CodePulse uses Kafka as its internal event bus to decouple services. When an analysis job completes, an event is published that independent consumers can act on. This architecture allows new capabilities, such as billing, notifications, or analytics, to be added without modifying the core analysis pipeline.
-
-## Technical Overview
-
-The platform is built as a monorepo containing independently deployable microservices. Each service has its own dependency management and can be scaled independently based on load.
-
-**Core Services**
-
-- **API Gateway**: A FastAPI application responsible for handling all incoming HTTP requests, authenticating users via GitHub OAuth, enforcing rate limits, and routing requests to the appropriate internal services.
-- **Worker Service**: A Celery-based background processing service that executes repository analysis tasks. Workers are horizontally scalable and coordinate through a Redis broker.
-- **Kafka Consumers**: Event-driven consumers that react to job lifecycle events published on Kafka topics. They handle downstream concerns such as user notifications and analytics logging.
-- **Frontend**: A React application built with Vite that provides the user-facing dashboard for submitting repositories and reviewing analysis results.
-
-**Infrastructure**
-
-- **PostgreSQL (Neon)**: Primary data store for users, projects, jobs, results, and AI interaction logs.
-- **Redis**: Message broker for Celery task queues and caching layer for Gemini API responses.
-- **Apache Kafka**: Event streaming backbone for inter-service communication.
-- **Docker**: Every service is containerized with multi-stage builds to produce minimal production images.
-- **Kubernetes**: Orchestration layer for production deployment, including Horizontal Pod Autoscalers for the worker service driven by KEDA based on Redis queue depth.
-
-## Authentication
-
-Users authenticate through GitHub OAuth 2.0. The platform does not store passwords. Upon successful OAuth authorization, the platform issues its own signed JWT for subsequent API requests.
+**Retrieve the Report** — The user requests the scan report via the API. The structured JSON report is returned from PostgreSQL.
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| API Framework | FastAPI |
-| Task Queue | Celery |
-| Message Broker / Cache | Redis |
-| Event Streaming | Apache Kafka |
-| Database | PostgreSQL (Neon) |
-| AI Provider | Google Gemini 2.0 Flash |
-| Containerization | Docker |
-| Orchestration | Kubernetes |
-| Package Management | uv |
-| Frontend | React, Vite, TanStack Query |
+| Layer | Technology | Purpose |
+|---|---|---|
+| API Framework | FastAPI | Async HTTP server for all client-facing endpoints |
+| Event Streaming | Apache Kafka | Decouples API from heavy AI processing |
+| Database | PostgreSQL (Neon) | Stores users, projects, and scan reports |
+| AI Provider | Google Gemini 2.0 Flash | Code analysis and report generation |
+| Containerization | Docker | Reproducible, portable service images |
+| Orchestration | Kubernetes | Container lifecycle management and scaling |
+| Auto-scaling | KEDA | Scales workers based on Kafka consumer lag |
+| Package Manager | uv | Fast, reproducible Python dependency management |
 
 ## Repository Structure
 
 ```
 CodePulse/
 ├── services/
-│   ├── api-gateway/       FastAPI application and authentication
-│   ├── worker/            Celery workers and analysis tasks
-│   └── kafka-consumers/   Event-driven consumers
-├── frontend/              React + Vite user interface
-├── k8s/                   Kubernetes manifests
-├── docker-compose.yml     Local development orchestration
-└── .env.example           Environment variable reference
+│   ├── api-gateway/       FastAPI application, authentication, project endpoints
+│   └── worker-service/    Kafka consumer, AI scanning engine
+├── k8s/
+│   ├── api-gateway/       Kubernetes Deployment and Service for the API Gateway
+│   ├── worker/            Kubernetes Deployment and KEDA ScaledObject for the Worker
+│   ├── kafka-broker.yaml  Zookeeper and Kafka deployed inside the cluster
+│   └── secrets.yaml       Kubernetes Secret template (never committed with real values)
+└── .env                   Local environment variables (gitignored)
 ```
 
-## Getting Started
+## Deployment Journey
 
-Copy `.env.example` to `.env` and populate the required values. Refer to the setup documentation within each service directory for service-specific configuration.
+Getting this cluster running taught me the kind of problems that real DevOps work involves:
+
+1. **Image Pull Failures** — `bitnami/kafka:latest` could not be resolved. Learned that image tags can be deprecated. Fix: switched to `wurstmeister/kafka:latest` and `wurstmeister/zookeeper:latest` which are stable and widely used for local development.
+2. **Hardcoded Hostnames** — The Python Kafka producer had `localhost:9092` hardcoded. Inside a Kubernetes pod, `localhost` means that specific pod, not the Kafka service. Fix: moved the broker address to a `pydantic-settings` config field and injected `kafka-service:9092` via a Kubernetes environment variable.
+3. **Image Cache** — After rebuilding the Docker image, Kubernetes was still using the old cached version. Fix: tagged the new image as `v2` and updated the deployment manifest to force a rollout.
+4. **`imagePullPolicy: Never`** — Required for local development so Kubernetes uses the locally built image instead of attempting to pull from Docker Hub.
+
+## Running Locally
+
+```bash
+# Apply secrets (fill in real values first)
+kubectl apply -f k8s/secrets.yaml
+
+# Deploy internal Kafka infrastructure
+kubectl apply -f k8s/kafka-broker.yaml
+
+# Deploy the API Gateway
+kubectl apply -f k8s/api-gateway/
+
+# Deploy the Worker Service
+kubectl apply -f k8s/worker/
+
+# Verify all pods are running
+kubectl get pods
+```
+
+## Planned Next Steps
+
+- Frontend dashboard using React and Vite
+- End-to-end test: submit a scan and retrieve the AI report via the API
+- Production cloud deployment to GKE or EKS
+- Additional microservice projects to deepen Kubernetes and distributed systems understanding
