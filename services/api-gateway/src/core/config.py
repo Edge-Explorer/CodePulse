@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     GITHUB_CLIENT_SECRET: str = ""
     JWT_SECRET: str = "dev_secret_key_change_in_production"
     JWT_ALGORITHM: str = "HS256"
+    KAFKA_BOOTSTRAP_SERVERS: str = "localhost:9092"
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int= 60
     
