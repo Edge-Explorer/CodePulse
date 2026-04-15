@@ -17,7 +17,7 @@ spec:
       containers:
       - name: worker-service
         image: codepulse-worker:latest
-        imagePullPolicy: AfterChecks
+        imagePullPolicy: Never
         env:
         - name: GEMINI_API_KEY
           valueFrom:
