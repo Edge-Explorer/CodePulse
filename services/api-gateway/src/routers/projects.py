@@ -8,6 +8,8 @@ from src.models.user import User
 from src.models.project import Project
 from src.schemas.project import ProjectCreate 
 from src.core.kafka import send_task
+from src.models.scan_report import ScanReport
+from sqlalchemy import select
 
 # 1. Define the router!
 router = APIRouter(prefix="/projects", tags=["Projects"])
@@ -18,6 +20,7 @@ async def create_project(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
+
     if "github.com" not in project_in.repo_url:
         raise HTTPException(status_code=400, detail="Only GitHub repositories are supported")
 
@@ -54,3 +57,47 @@ async def create_project(
 
     await send_task("project_scans", task_data)
     return new_project
+
+@router.get("/")
+async def list_projects(
+    current_user: User= Depends(get_current_user),
+    db: AsyncSession= Depends(get_db)
+):
+    # Fetch all projects belonging to the current user
+    result= await db.execute(
+        select(Project).where(Project.owner_id == current_user.id)
+    )
+    return result.scalars().all()
+    
+@router.get("/{project_id}/report")
+async def get_project_report(
+    project_id: int,
+    current_user: User= Depends(get_current_user),
+    db: AsyncSession= Depends(get_db)
+):
+    # (Security check: don't let others see your reports!)
+    project_result= await db.execute(
+        select(Project).where(Project.id == project_id, Project.owner_id == current_user.id)
+    )
+    project= project_result.scalar_one_or_none()
+
+    if not project:
+        raise HTTPException(status_code= 404, detail= "Project not found")
+
+    # Fetch the latest scan report
+    report_result= await db.execute(
+        select(ScanReport)
+        .where(ScanReport.project_id == project_id)
+        .order_by(ScanReport.created_at.desc())
+    )
+    report= report_result.scalar_one_or_none()
+
+    if not report:
+        return {"status": "pending", "message": "Scan is in progress or not started."}
+
+    return{
+        "status": "completed",
+        "project_name": project.name,
+        "report": report.report_data,
+        "scanned_at": report.created_at
+    }
