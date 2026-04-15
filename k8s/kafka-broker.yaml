@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: zookeeper
-        image: bitnami/zookeeper:latest
+        image: bitnami/zookeeper:3.9.1
         env:
         - name: ALLOW_ANONYMOUS_LOGIN
           value: "yes"
@@ -56,7 +56,7 @@ spec:
     spec:
       containers:
       - name: kafka
-        image: bitnami/kafka:latest
+        image: bitnami/kafka:3.6.1
         ports:
         - containerPort: 9092
         env:
