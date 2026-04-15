@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: codepulse-api:v1
+        image: codepulse-api:v2
         imagePullPolicy: Never
         ports:
         - containerPort: 8000
