@@ -7,6 +7,7 @@ WORKDIR /app
 
 # Install dependencies only (makes builds fast!)
 RUN --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
     uv sync --frozen --no-install-project --no-dev
 
 # Stage 2: The Runtime
