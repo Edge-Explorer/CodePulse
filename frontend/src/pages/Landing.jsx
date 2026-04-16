@@ -27,7 +27,7 @@ const Landing = ({ onAuthenticate }) => {
     <div className="container" style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
       
       {/* Background Ripple Effect - NEW HERO FOUNDATION */}
-      <div className="absolute inset-x-0 top-0 h-[40rem] z-0">
+      <div className="absolute inset-x-0 top-0 h-[40rem] z-[2]">
         <BackgroundRippleEffect />
       </div>
 
@@ -36,16 +36,18 @@ const Landing = ({ onAuthenticate }) => {
         {meteors.map((_, i) => <Meteor key={i} index={i} />)}
       </div>
 
-      {/* Content Layer */}
-      <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '40px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Content Layer - pointer-events:none lets clicks pass through to the ripple grid */}
+      <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '40px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', pointerEvents: 'none' }}>
         
         {/* Giant Interactive Brand Name */}
         <div className="w-full h-[15rem] md:h-[25rem] flex items-center justify-center -mt-10 mr-4">
           <TextHoverEffect text="CODEPULSE" />
         </div>
 
-        {/* GitHub Auth */}
-        <AuthButton onClick={onAuthenticate} className="-mt-12 mb-8" />
+        {/* GitHub Auth - re-enable pointer events for the button */}
+        <div style={{ pointerEvents: 'auto' }}>
+          <AuthButton onClick={onAuthenticate} className="-mt-12 mb-8" />
+        </div>
 
         {/* Feature Tag */}
         <motion.div 
