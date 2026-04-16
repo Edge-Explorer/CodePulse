@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
-import Landing from './pages/Landing';
-import Dashboard from './pages/Dashboard';
+import LandingPage from './pages/Landing';
+import DashboardPage from './pages/Dashboard';
 
+/**
+ * Main Application Component
+ * Handles the high-level routing between Authentication (Landing) 
+ * and the main Application interface (Dashboard).
+ */
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // For now, we simulate a login to see the Dashboard
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  const handleAuthentication = () => {
+    setIsAuthenticated(true);
   };
 
   return (
-    <>
-      {isLoggedIn ? (
-        <Dashboard />
+    <div className="app-root">
+      {isAuthenticated ? (
+        <DashboardPage />
       ) : (
-        <Landing onLogin={handleLogin} />
+        <LandingPage onAuthenticate={handleAuthentication} />
       )}
-    </>
+    </div>
   );
 };
 

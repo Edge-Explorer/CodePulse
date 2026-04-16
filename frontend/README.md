@@ -1,16 +1,27 @@
-# React + Vite
+# CodePulse AI Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A high-performance, visually immersive dashboard for code intelligence, built with React 19, Vite, and Framer Motion.
 
-Currently, two official plugins are available:
+## 🏗️ Architecture
+The project follows a modular, scalable architecture to ensure reliability and ease of debugging:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **`/src/components`**: Reusable UI atoms and molecules (Sidebars, Statistcs Cards).
+- **`/src/pages`**: High-level screen components (Landing, Dashboard overview).
+- **`/src/main.jsx`**: The entry point, equipped with a Global Error Catcher for production observability.
 
-## React Compiler
+## 🎨 Design System
+- **Theme**: Futuristic Dark Mode with Glassmorphism.
+- **Animations**: Orchestrated via Framer Motion for staggered entrances and layout transitions.
+- **Icons**: Standardized Lucide-React icon set.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Troubleshooting & Reliability
+During development, we encountered and resolved:
+1. **Directory Collisions**: Re-structured the monorepo to prevent nested project folders.
+2. **Vite Cache Invalidation**: Implemented a `npx vite optimize --force` workflow to resolve corrupted dependency bundling.
+3. **Ghost Crashes**: Integrated a custom global error handler in `main.jsx` to catch and display runtime failures on the screen.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Getting Started
+```bash
+npm install
+npm run dev
+```
