@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiGithub, FiZap, FiShield, FiSearch, FiTerminal, FiChevronRight } from 'react-icons/fi';
 import { AuthButton } from '../components/ui/AuthButton';
+import { TextHoverEffect } from '../components/ui/TextHoverEffect';
 
 const Meteor = ({ index }) => {
   const style = {
@@ -68,13 +69,10 @@ const Landing = ({ onAuthenticate }) => {
           Beta v1.0 Launching Soon
         </motion.div>
         
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          style={{ fontSize: '5rem', fontWeight: 800, marginBottom: '24px', lineHeight: 1, letterSpacing: '-2px' }}
-        >
-          Master Your <span className="neon-text">Architecture</span>
-        </motion.h1>
+        {/* Giant Interactive Brand Name */}
+        <div className="h-[20rem] md:h-[30rem] flex items-center justify-center -mt-8 mb-4">
+          <TextHoverEffect text="CODEPULSE" />
+        </div>
         
         <motion.p 
           initial={{ opacity: 0, y: 20 }} 
