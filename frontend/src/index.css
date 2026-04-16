@@ -2,119 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fonts are loaded via <link> in index.html to avoid blocking CSS parse */
-
-
 :root {
-  --bg-dark: #05060b;
-  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-dark: #000000;
+  --bg-card: rgba(255, 255, 255, 0.01);
+  --glass-border: rgba(255, 255, 255, 0.05);
   --accent-primary: #6366f1;
-  --accent-secondary: #a855f7;
-  --text-main: #f8fafc;
+  --text-main: #ffffff;
   --text-dim: #94a3b8;
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --success: #22c55e;
-  --error: #ef4444;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Outfit', sans-serif;
+@keyframes cell-ripple {
+  0% { opacity: 0; transform: scale(0.9); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+  100% { opacity: 0.1; transform: scale(1); }
+}
+
+.ripple-effect {
+  animation: cell-ripple 0.8s ease-out;
 }
 
 body {
   background-color: var(--bg-dark);
   color: var(--text-main);
+  margin: 0;
   overflow-x: hidden;
-  min-height: 100vh;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+  font-family: 'Outfit', sans-serif;
 }
 
-.glass-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-}
-
-.neon-text {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  color: white;
-  border: none;
-  padding: 14px 32px;
-  border-radius: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-primary:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-
-code {
-  font-family: 'JetBrains Mono', monospace;
-  background: rgba(0,0,0,0.3);
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-/* Premium Animations */
-@keyframes meteor {
-  0% { transform: rotate(215deg) translateX(0); opacity: 1; }
-  70% { opacity: 1; }
-  100% { transform: rotate(215deg) translateX(-500px); opacity: 0; }
-}
-
+/* Custom Meteor Effect */
 .meteor-effect {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  height: 2px;
-  width: 2px;
-  background: var(--accent-primary);
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, #6366f1);
   transform: rotate(215deg);
-  animation: meteor 3s linear infinite;
-  pointer-events: none;
+  opacity: 0.1;
+  animation: meteor linear infinite;
 }
 
-.meteor-effect::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 1px;
-  background: linear-gradient(90deg, var(--accent-primary), transparent);
+@keyframes meteor {
+  0% { transform: rotate(215deg) translateY(-100px); opacity: 0; }
+  10% { opacity: 0.5; }
+  100% { transform: rotate(215deg) translateY(100vh); opacity: 0; }
 }

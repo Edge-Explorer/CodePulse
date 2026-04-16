@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FiGithub, FiZap, FiShield, FiSearch, FiTerminal, FiChevronRight } from 'react-icons/fi';
 import { AuthButton } from '../components/ui/AuthButton';
 import { TextHoverEffect } from '../components/ui/TextHoverEffect';
+import { BackgroundRippleEffect } from '../components/ui/BackgroundRippleEffect';
 
 const Meteor = ({ index }) => {
   const style = {
@@ -23,33 +24,27 @@ const Landing = ({ onAuthenticate }) => {
   ];
 
   return (
-    <div className="container" style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
+    <div className="container" style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
       
-      {/* Background Meteor Shower */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: -1, pointerEvents: 'none', opacity: 0.4 }}>
+      {/* Background Ripple Effect - NEW HERO FOUNDATION */}
+      <div className="absolute inset-x-0 top-0 h-[40rem] z-0">
+        <BackgroundRippleEffect />
+      </div>
+
+      {/* Subtle Meteor Shower Overlay */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: -1, pointerEvents: 'none', opacity: 0.15 }}>
         {meteors.map((_, i) => <Meteor key={i} index={i} />)}
       </div>
 
-      {/* Grid Pattern Overlay */}
-      <div style={{ 
-        position: 'absolute', 
-        inset: 0, 
-        zIndex: -2, 
-        backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
-        backgroundSize: '40px 40px',
-        maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
-        WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
-      }} />
-
-      {/* Primary Landing Content - Centered & High */}
-      <div style={{ textAlign: 'center', padding: '40px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Content Layer */}
+      <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '40px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
-        {/* Giant Interactive Brand Name - Moved to Top */}
+        {/* Giant Interactive Brand Name */}
         <div className="w-full h-[15rem] md:h-[25rem] flex items-center justify-center -mt-10 mr-4">
           <TextHoverEffect text="CODEPULSE" />
         </div>
 
-        {/* GitHub Auth - Moved right below the name */}
+        {/* GitHub Auth */}
         <AuthButton onClick={onAuthenticate} className="-mt-12 mb-8" />
 
         {/* Feature Tag */}
@@ -82,7 +77,7 @@ const Landing = ({ onAuthenticate }) => {
       </div>
 
       {/* Featured Bento Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginBottom: '80px' }}>
+      <div style={{ position: 'relative', zIndex: 10, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginBottom: '80px' }}>
         {features.map((f, i) => (
           <motion.div 
             key={i} 
@@ -90,7 +85,7 @@ const Landing = ({ onAuthenticate }) => {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ delay: 0.3 + i * 0.1 }}
             className="glass-card" 
-            style={{ padding: '40px', textAlign: 'left', background: 'rgba(255,255,255,0.02)' }}
+            style={{ padding: '40px', textAlign: 'left', background: 'rgba(255,255,255,0.015)', border: '1px solid rgba(255,255,255,0.03)' }}
           >
             <div style={{ marginBottom: '24px' }}>{f.icon}</div>
             <h3 style={{ marginBottom: '12px', fontSize: '1.4rem', fontWeight: 600 }}>{f.title}</h3>
