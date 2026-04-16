@@ -1,4 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Fonts are loaded via <link> in index.html to avoid blocking CSS parse */
+
 
 :root {
   --bg-dark: #05060b;
@@ -82,4 +87,34 @@ code {
   background: rgba(0,0,0,0.3);
   padding: 2px 6px;
   border-radius: 4px;
+}
+/* Premium Animations */
+@keyframes meteor {
+  0% { transform: rotate(215deg) translateX(0); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: rotate(215deg) translateX(-500px); opacity: 0; }
+}
+
+.meteor-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 2px;
+  width: 2px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transform: rotate(215deg);
+  animation: meteor 3s linear infinite;
+  pointer-events: none;
+}
+
+.meteor-effect::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-primary), transparent);
 }
