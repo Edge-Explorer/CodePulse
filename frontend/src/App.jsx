@@ -1,27 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/Landing';
 import DashboardPage from './pages/Dashboard';
+import DocsDetail from './pages/DocsDetail';
 
-/**
- * Main Application Component
- * Handles the high-level routing between Authentication (Landing) 
- * and the main Application interface (Dashboard).
- */
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const handleAuthentication = () => {
-    setIsAuthenticated(true);
-  };
+  // Simple check for simulation, in real app we'd use a context/provider
+  const isAuthenticated = localStorage.getItem('auth') === 'true';
 
   return (
-    <div className="app-root">
-      {isAuthenticated ? (
-        <DashboardPage />
-      ) : (
-        <LandingPage onAuthenticate={handleAuthentication} />
-      )}
-    </div>
+    <Router>
+      <div className="app-root">
+        <Routes>
+          <Route path="/" element={<LandingPage onAuthenticate={() => {
+            localStorage.setItem('auth', 'true');
+            window.location.href = '/dashboard';
+          }} />} />
+          
+          <Route path="/dashboard" element={
+            isAuthenticated ? <DashboardPage /> : <Navigate to="/" />
+          } />
+
+          <Route path="/docs/:slug" element={<DocsDetail />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

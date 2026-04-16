@@ -4,6 +4,7 @@ import { AuthButton } from '../components/ui/AuthButton';
 import { TextHoverEffect } from '../components/ui/TextHoverEffect';
 import { BackgroundRippleEffect } from '../components/ui/BackgroundRippleEffect';
 import Navbar from '../components/Navbar';
+import FeaturesSection from '../components/FeaturesSection';
 
 const Meteor = ({ index }) => {
   const style = {
@@ -42,11 +43,13 @@ const Landing = ({ onAuthenticate }) => {
           <TextHoverEffect text="CODEPULSE" />
         </div>
 
-        {/* GitHub Auth */}
         <div style={{ pointerEvents: 'auto' }}>
           <AuthButton onClick={onAuthenticate} className="-mt-12" />
         </div>
       </div>
+
+      {/* Features Grid */}
+      <FeaturesSection />
     </div>
   );
 };

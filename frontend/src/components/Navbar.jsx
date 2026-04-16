@@ -41,19 +41,22 @@ const Navbar = ({ onConnect }) => {
           <div className="h-4 w-px bg-zinc-800 mx-1 sm:mx-2" />
 
           {/* Action Button */}
-          <button
-            onClick={onConnect}
+          <a
+            href="https://github.com/Edge-Explorer/CodePulse"
+            target="_blank"
+            rel="noopener noreferrer"
             className={cn(
-            "group relative flex items-center gap-2 px-5 py-2 rounded-full",
-            "bg-white text-black text-[12px] font-bold transition-all duration-300",
-            "hover:bg-zinc-200 active:scale-[0.96]"
-          )}>
+              "group relative flex items-center gap-2 px-5 py-2 rounded-full",
+              "bg-white text-black text-[12px] font-bold transition-all duration-300",
+              "hover:bg-zinc-200 active:scale-[0.96]"
+            )}
+          >
             <FiGithub className="w-3.5 h-3.5" />
-            <span>Connect</span>
+            <span>Star on GitHub</span>
             
             {/* Hover Glow for button */}
             <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 blur-md transition-opacity" />
-          </button>
+          </a>
         </div>
       </NoiseBackground>
     </motion.div>
