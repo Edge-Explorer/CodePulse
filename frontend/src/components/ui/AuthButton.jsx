@@ -10,27 +10,32 @@ import { cn } from "../../utils/cn";
  */
 export const AuthButton = ({ onClick, className }) => {
   return (
-    <div className={cn("flex justify-center", className)}>
+    <div className={cn("flex justify-center items-center w-full", className)}>
       <NoiseBackground
-        containerClassName="w-fit p-[2px] rounded-full mx-auto"
+        containerClassName="p-[1px] rounded-full"
         gradientColors={[
-          "rgba(99, 102, 241, 0.5)",
-          "rgba(168, 85, 247, 0.5)",
-          "rgba(34, 197, 94, 0.5)",
+          "rgba(99, 102, 241, 0.6)",
+          "rgba(168, 85, 247, 0.6)",
+          "rgba(34, 197, 94, 0.6)",
         ]}
       >
         <button
           onClick={onClick}
           className={cn(
-            "h-full w-full cursor-pointer rounded-full px-6 py-3",
-            "bg-gradient-to-r from-neutral-100 via-neutral-100 to-white dark:from-black dark:via-black dark:to-neutral-900",
-            "text-black dark:text-white font-semibold flex items-center gap-3",
-            "shadow-[0px_2px_0px_0px_rgba(255,255,255,0.1)_inset,0px_1px_2px_rgba(0,0,0,0.5)]",
-            "transition-all duration-100 active:scale-95 hover:brightness-110"
+            "relative flex items-center justify-center gap-3",
+            "px-8 py-3.5 rounded-full z-20",
+            "bg-zinc-950 text-white font-bold",
+            "border border-white/5",
+            "hover:bg-zinc-900 transition-all duration-300",
+            "shadow-[0_0_20px_rgba(99,102,241,0.2)]",
+            "active:scale-[0.98]"
           )}
         >
-          <FiGithub size={20} />
-          <span>Continue with GitHub</span>
+          <FiGithub size={20} className="text-indigo-400" />
+          <span className="tracking-wide">Continue with GitHub</span>
+          
+          {/* Subtle Inner Glow */}
+          <div className="absolute inset-x-0 h-px w-1/2 mx-auto -top-px shadow-2xl bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
         </button>
       </NoiseBackground>
     </div>
