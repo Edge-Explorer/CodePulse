@@ -41,16 +41,18 @@ const Landing = ({ onAuthenticate }) => {
         WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
       }} />
 
-      {/* Navigation */}
-      <nav style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '32px 0', marginBottom: '80px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <FiZap size={24} className="neon-text" />
-          <h2 className="neon-text" style={{ fontSize: '1.4rem', letterSpacing: '1.5px', fontWeight: 800 }}>CODEPULSE</h2>
+      {/* Primary Landing Content - Centered & High */}
+      <div style={{ textAlign: 'center', padding: '40px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        
+        {/* Giant Interactive Brand Name - Moved to Top */}
+        <div className="w-full h-[15rem] md:h-[25rem] flex items-center justify-center -mt-10 mr-4">
+          <TextHoverEffect text="CODEPULSE" />
         </div>
-      </nav>
 
-      {/* Hero Section */}
-      <div style={{ textAlign: 'center', padding: '60px 0', marginBottom: '100px' }}>
+        {/* GitHub Auth - Moved right below the name */}
+        <AuthButton onClick={onAuthenticate} className="-mt-12 mb-8" />
+
+        {/* Feature Tag */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }} 
           animate={{ opacity: 1, scale: 1 }} 
@@ -63,28 +65,20 @@ const Landing = ({ onAuthenticate }) => {
             color: 'var(--accent-primary)',
             fontSize: '0.85rem',
             fontWeight: 600,
-            marginBottom: '24px'
+            marginBottom: '16px'
           }}
         >
           Beta v1.0 Launching Soon
         </motion.div>
         
-        {/* Giant Interactive Brand Name */}
-        <div className="h-[20rem] md:h-[30rem] flex items-center justify-center -mt-8 mb-4">
-          <TextHoverEffect text="CODEPULSE" />
-        </div>
-        
         <motion.p 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ delay: 0.1 }}
-          style={{ color: 'var(--text-dim)', fontSize: '1.3rem', maxWidth: '700px', margin: '0 auto 48px', lineHeight: 1.6 }}
+          style={{ color: 'var(--text-dim)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto 48px', lineHeight: 1.6 }}
         >
-          Autonomous code intelligence that visualizes and audits your system 
-          structure with surgical AI precision.
+          Visual code intelligence with surgical AI precision.
         </motion.p>
-        
-        <AuthButton onClick={onAuthenticate} className="mt-8" />
       </div>
 
       {/* Featured Bento Grid */}
@@ -96,11 +90,11 @@ const Landing = ({ onAuthenticate }) => {
             animate={{ opacity: 1, y: 0 }} 
             transition={{ delay: 0.3 + i * 0.1 }}
             className="glass-card" 
-            style={{ padding: '48px', textAlign: 'left', background: 'rgba(255,255,255,0.02)' }}
+            style={{ padding: '40px', textAlign: 'left', background: 'rgba(255,255,255,0.02)' }}
           >
-            <div style={{ marginBottom: '32px' }}>{f.icon}</div>
-            <h3 style={{ marginBottom: '16px', fontSize: '1.5rem', fontWeight: 600 }}>{f.title}</h3>
-            <p style={{ color: 'var(--text-dim)', lineHeight: 1.7, fontSize: '1.05rem' }}>{f.desc}</p>
+            <div style={{ marginBottom: '24px' }}>{f.icon}</div>
+            <h3 style={{ marginBottom: '12px', fontSize: '1.4rem', fontWeight: 600 }}>{f.title}</h3>
+            <p style={{ color: 'var(--text-dim)', lineHeight: 1.6, fontSize: '1rem' }}>{f.desc}</p>
           </motion.div>
         ))}
       </div>
