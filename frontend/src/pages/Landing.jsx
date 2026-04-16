@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { AuthButton } from '../components/ui/AuthButton';
 import { TextHoverEffect } from '../components/ui/TextHoverEffect';
 import { BackgroundRippleEffect } from '../components/ui/BackgroundRippleEffect';
+import Navbar from '../components/Navbar';
 
 const Meteor = ({ index }) => {
   const style = {
@@ -20,6 +21,9 @@ const Landing = ({ onAuthenticate }) => {
   return (
     <div className="container" style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
       
+      {/* Floating Navigation */}
+      <Navbar onConnect={onAuthenticate} />
+
       {/* Background Ripple Effect */}
       <div className="absolute inset-x-0 top-0 h-[40rem] z-[2]">
         <BackgroundRippleEffect />
