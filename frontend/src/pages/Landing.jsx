@@ -1,3 +1,5 @@
+import React from 'react';
+import { motion } from 'framer-motion';
 import { FiGithub, FiZap, FiShield, FiSearch, FiTerminal, FiChevronRight } from 'react-icons/fi';
 import { AuthButton } from '../components/ui/AuthButton';
 
