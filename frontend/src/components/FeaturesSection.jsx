@@ -47,7 +47,7 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section className="relative py-24 px-6 max-w-7xl mx-auto z-10">
+    <section id="features" className="relative py-24 px-6 max-w-7xl mx-auto z-10">
       <div className="text-center mb-16 px-4">
         <motion.h2 
            initial={{ opacity: 0, y: 20 }}

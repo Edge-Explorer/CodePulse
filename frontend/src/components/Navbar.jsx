@@ -1,11 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { FiGithub } from 'react-icons/fi';
 import { cn } from '../utils/cn';
 import { NoiseBackground } from './ui/NoiseBackground';
 
 const Navbar = ({ onConnect }) => {
-  const navItems = ['Features', 'Architecture', 'Docs'];
+  const navItems = [
+    { name: 'Features', href: '/#features' },
+    { name: 'Architecture', href: '/#features' }, // Pointing to features for now
+    { name: 'Docs', href: '/#features' }
+  ];
 
   return (
     <motion.div
@@ -22,18 +27,20 @@ const Navbar = ({ onConnect }) => {
           "relative rounded-full bg-zinc-950/90 backdrop-blur-xl px-1 sm:px-2 py-1.5",
           "flex items-center gap-2 sm:gap-6 min-w-fit"
         )}>
-          {/* Subtle Inner Highlight */}
-          <div className="absolute inset-x-12 h-px w-2/3 mx-auto -top-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+          {/* Logo (Back to Home) */}
+          <Link to="/" className="pl-4 sm:pl-6 text-zinc-500 hover:text-indigo-400 transition-colors">
+            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/></svg>
+          </Link>
 
           {/* Links */}
-          <div className="flex items-center gap-1 sm:gap-4 pl-3 sm:pl-6">
-            {navItems.map((name) => (
+          <div className="flex items-center gap-1 sm:gap-4">
+            {navItems.map((item) => (
               <a
-                key={name}
-                href={`#${name.toLowerCase()}`}
+                key={item.name}
+                href={item.href}
                 className="px-3 py-1.5 text-[13px] font-medium text-zinc-400 hover:text-white transition-all duration-300 rounded-full hover:bg-white/5"
               >
-                {name}
+                {item.name}
               </a>
             ))}
           </div>
