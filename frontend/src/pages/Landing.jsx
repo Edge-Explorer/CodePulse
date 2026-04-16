@@ -1,6 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
 import { FiGithub, FiZap, FiShield, FiSearch, FiTerminal, FiChevronRight } from 'react-icons/fi';
+import { AuthButton } from '../components/ui/AuthButton';
 
 const Meteor = ({ index }) => {
   const style = {
@@ -89,16 +88,7 @@ const Landing = ({ onAuthenticate }) => {
           structure with surgical AI precision.
         </motion.p>
         
-        <motion.button
-          whileHover={{ scale: 1.05 }} 
-          whileTap={{ scale: 0.95 }}
-          className="btn-primary" 
-          onClick={onAuthenticate}
-          style={{ margin: '0 auto', fontSize: '1.1rem', padding: '16px 48px', gap: '12px' }}
-        >
-          <span>Start Auditing Now</span>
-          <FiChevronRight size={20} />
-        </motion.button>
+        <AuthButton onClick={onAuthenticate} className="mt-8" />
       </div>
 
       {/* Featured Bento Grid */}
