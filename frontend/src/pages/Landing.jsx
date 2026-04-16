@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiGithub, FiZap, FiShield, FiSearch, FiTerminal, FiChevronRight } from 'react-icons/fi';
+import { FiShield, FiSearch, FiTerminal } from 'react-icons/fi';
 import { AuthButton } from '../components/ui/AuthButton';
 import { TextHoverEffect } from '../components/ui/TextHoverEffect';
 import { BackgroundRippleEffect } from '../components/ui/BackgroundRippleEffect';
@@ -46,40 +46,12 @@ const Landing = ({ onAuthenticate }) => {
 
         {/* GitHub Auth - re-enable pointer events for the button */}
         <div style={{ pointerEvents: 'auto' }}>
-          <AuthButton onClick={onAuthenticate} className="-mt-12 mb-8" />
+          <AuthButton onClick={onAuthenticate} className="-mt-12" />
         </div>
-
-        {/* Feature Tag */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }} 
-          animate={{ opacity: 1, scale: 1 }} 
-          style={{ 
-            display: 'inline-block', 
-            padding: '4px 12px', 
-            borderRadius: '20px', 
-            background: 'rgba(99, 102, 241, 0.1)', 
-            border: '1px solid rgba(99, 102, 241, 0.2)',
-            color: 'var(--accent-primary)',
-            fontSize: '0.85rem',
-            fontWeight: 600,
-            marginBottom: '16px'
-          }}
-        >
-          Beta v1.0 Launching Soon
-        </motion.div>
-        
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ delay: 0.1 }}
-          style={{ color: 'var(--text-dim)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto 48px', lineHeight: 1.6 }}
-        >
-          Visual code intelligence with surgical AI precision.
-        </motion.p>
       </div>
 
       {/* Featured Bento Grid */}
-      <div style={{ position: 'relative', zIndex: 10, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginBottom: '80px' }}>
+      <div style={{ position: 'relative', zIndex: 10, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginBottom: '80px', pointerEvents: 'none' }}>
         {features.map((f, i) => (
           <motion.div 
             key={i} 
