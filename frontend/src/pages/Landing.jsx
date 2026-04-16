@@ -41,15 +41,11 @@ const Landing = ({ onAuthenticate }) => {
       }} />
 
       {/* Navigation */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '32px 0', marginBottom: '80px' }}>
+      <nav style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '32px 0', marginBottom: '80px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <FiZap size={24} className="neon-text" />
           <h2 className="neon-text" style={{ fontSize: '1.4rem', letterSpacing: '1.5px', fontWeight: 800 }}>CODEPULSE</h2>
         </div>
-        <button onClick={onAuthenticate} className="btn-primary" style={{ background: 'transparent', border: '1px solid var(--glass-border)', padding: '10px 24px' }}>
-          <FiGithub size={18} />
-          <span>Sign In</span>
-        </button>
       </nav>
 
       {/* Hero Section */}

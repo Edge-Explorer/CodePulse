@@ -2,46 +2,46 @@ import React from "react";
 import { cn } from "../../utils/cn";
 
 /**
- * NoiseBackground Component
- * Creates a pixelated noise texture overlay on top of dynamic gradients.
- * Essential for the "Aceternity UI" aesthetic.
+ * NoiseBackground Component - Pro Edition
+ * Creates an animated luminous border and a high-grain noise overlay. 
+ * Essential for the "Aceternity UI" aesthetic. 🤴🏿✨
  */
 export const NoiseBackground = ({
   children,
   className,
   containerClassName,
   gradientColors = [
-    "rgb(99, 102, 241)",
-    "rgb(168, 85, 247)",
-    "rgb(34, 197, 94)",
+    "#6366f1",
+    "#a855f7", 
+    "#ec4899"
   ],
 }) => {
   return (
     <div
       className={cn(
-        "relative flex flex-col items-center justify-center overflow-hidden bg-transparent",
+        "relative flex flex-col items-center justify-center overflow-hidden h-fit transition-all duration-300",
         containerClassName
       )}
     >
-      {/* Noise Texture Overlay */}
+      {/* Moving Animated Gradient Rim */}
       <div
-        className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+        className="absolute inset-[-200%] z-0 animate-[spin_8s_linear_infinite]"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          background: `conic-gradient(from 0deg, transparent, ${gradientColors.join(", ")}, transparent)`,
+          maskImage: "radial-gradient(circle at center, transparent 72%, black 72.5%)",
+          WebkitMaskImage: "radial-gradient(circle at center, transparent 72%, black 72.5%)"
         }}
       ></div>
 
-      {/* Dynamic Gradient Blobs */}
+      {/* Noise Texture Layer */}
       <div
-        className="absolute inset-0 z-1 pointer-events-none"
+        className="absolute inset-0 z-1 opacity-[0.08] pointer-events-none grayscale"
         style={{
-          background: `radial-gradient(circle at center, ${gradientColors.join(", ")})`,
-          filter: "blur(40px)",
-          opacity: 0.3,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
         }}
       ></div>
 
-      <div className={cn("relative z-10", className)}>{children}</div>
+      <div className={cn("relative z-10 w-full h-full", className)}>{children}</div>
     </div>
   );
 };
