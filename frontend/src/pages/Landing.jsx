@@ -39,8 +39,8 @@ const Landing = ({ onAuthenticate }) => {
       {/* Content Layer - pointer-events:none lets clicks pass through to the ripple grid */}
       <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '40px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', pointerEvents: 'none' }}>
         
-        {/* Giant Interactive Brand Name */}
-        <div className="w-full h-[15rem] md:h-[25rem] flex items-center justify-center -mt-10 mr-4">
+        {/* Giant Interactive Brand Name - pointer-events re-enabled for mouse tracking */}
+        <div className="w-full h-[15rem] md:h-[25rem] flex items-center justify-center -mt-10 mr-4" style={{ pointerEvents: 'auto' }}>
           <TextHoverEffect text="CODEPULSE" />
         </div>
 

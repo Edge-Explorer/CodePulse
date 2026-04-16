@@ -56,7 +56,7 @@ export const BackgroundRippleEffect = ({ className }) => {
 
         // Intensity fades with distance: closest cells glow brighter
         const intensity = isRippling
-          ? Math.max(0.05, 0.6 - distance * 0.045)
+          ? Math.max(0.01, 0.15 - distance * 0.012)
           : 0;
 
         const delay = isRippling ? `${distance * 50}ms` : "0ms";
