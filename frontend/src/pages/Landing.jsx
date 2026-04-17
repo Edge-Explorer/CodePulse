@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import ArchitectureSection from '../components/ArchitectureSection';
 import FeaturesSection from '../components/FeaturesSection';
 import DocsOverviewSection from '../components/DocsOverviewSection';
+import Footer from '../components/Footer';
 
 const Meteor = ({ index }) => {
   const style = {
@@ -62,6 +63,9 @@ const Landing = ({ onAuthenticate }) => {
 
       {/* Technical Documentation Hub */}
       <DocsOverviewSection />
+
+      {/* Footer / Contact Section */}
+      <Footer />
       
     </div>
   );

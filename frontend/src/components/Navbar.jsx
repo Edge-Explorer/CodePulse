@@ -30,7 +30,7 @@ const Navbar = ({ onConnect }) => {
         });
       }, observerOptions);
 
-      const sections = ['features', 'architecture', 'docs'];
+      const sections = ['features', 'architecture', 'docs', 'contact'];
       sections.forEach((id) => {
         const el = document.getElementById(id);
         if (el) observer.observe(el);
@@ -51,7 +51,8 @@ const Navbar = ({ onConnect }) => {
   const navItems = [
     { name: 'Features', id: 'features', href: '/#features' },
     { name: 'Architecture', id: 'architecture', href: '/#architecture' },
-    { name: 'Docs', id: 'docs', href: '/#docs' }
+    { name: 'Docs', id: 'docs', href: '/#docs' },
+    { name: 'Contact', id: 'contact', href: '/#contact' }
   ];
 
   const handleNavClick = (e, item) => {
