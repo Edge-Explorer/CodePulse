@@ -1,29 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
 import ShinyText from './ui/ShinyText';
 import { NoiseBackground } from './ui/NoiseBackground';
+import ContactModal from './ContactModal';
 import { cn } from '../utils/cn';
 
-const ContactCard = ({ name, value, url, icon: Icon, colors, delay = 0 }) => (
+const ContactCard = ({ name, value, url, icon: Icon, colors, onClick, delay = 0 }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay }}
-    className="pointer-events-auto"
+    className="pointer-events-auto cursor-pointer"
+    onClick={onClick}
   >
     <NoiseBackground
       containerClassName="w-full h-full rounded-[2rem]"
       gradientColors={colors}
     >
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group relative block p-8 rounded-[2rem] bg-zinc-950/90 backdrop-blur-xl h-full transition-all duration-300"
-      >
+      <div className="group relative block p-8 rounded-[2rem] bg-zinc-950/90 backdrop-blur-xl h-full transition-all duration-300">
         <div className="flex items-start justify-between mb-8">
           <div className="p-4 rounded-2xl bg-zinc-900 border border-white/5 group-hover:border-white/10 transition-all">
             <Icon className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
@@ -47,12 +44,14 @@ const ContactCard = ({ name, value, url, icon: Icon, colors, delay = 0 }) => (
             background: `linear-gradient(90deg, transparent, ${colors[0]}, transparent)`,
           }}
         />
-      </a>
+      </div>
     </NoiseBackground>
   </motion.div>
 );
 
 const ContactSection = () => {
+  const [isMailOpen, setIsMailOpen] = useState(false);
+
   const contacts = [
     {
       name: 'GitHub Repository',
@@ -68,13 +67,12 @@ const ContactSection = () => {
       url: 'https://linkedin.com/in/karan-shelar-779381343',
       icon: FaLinkedin,
       colors: ["rgb(59, 130, 246)", "rgb(37, 99, 235)", "rgb(29, 78, 216)"],
-      colorType: 'blue',
       delay: 0.2
     },
     {
       name: 'Direct Channel',
       value: 'karanshelar8775@gmail.com',
-      url: 'mailto:karanshelar8775@gmail.com',
+      onClick: () => setIsMailOpen(true),
       icon: FaEnvelope,
       colors: ["rgb(239, 68, 68)", "rgb(225, 29, 72)", "rgb(190, 18, 60)"],
       delay: 0.3
@@ -105,9 +103,19 @@ const ContactSection = () => {
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 pointer-events-auto">
         {contacts.map((contact) => (
-          <ContactCard key={contact.name} {...contact} />
+          <ContactCard 
+            key={contact.name} 
+            {...contact} 
+            onClick={contact.onClick || (() => window.open(contact.url, '_blank'))} 
+          />
         ))}
       </div>
+
+      <ContactModal 
+        isOpen={isMailOpen} 
+        onClose={() => setIsMailOpen(false)} 
+        recipientEmail="karanshelar8775@gmail.com"
+      />
     </section>
   );
 };

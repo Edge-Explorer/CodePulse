@@ -39,8 +39,8 @@ const Footer = () => {
             viewport={{ once: true }}
             className="flex items-center gap-2 mb-4"
           >
-            <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center font-black text-black">CP</div>
-            <span className="text-xl font-black tracking-tighter text-white">CODEPULSE</span>
+            <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center font-black text-black text-sm">CP</div>
+            <span className="text-xl font-black tracking-tighter text-white italic">CODEPULSE</span>
           </motion.div>
           <p className="text-zinc-500 text-sm max-w-xs leading-relaxed">
             Architecting the future of AI-driven DevOps. 
@@ -48,33 +48,13 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Social Connectivity */}
-        <div className="flex items-center gap-4 pointer-events-auto">
-          {socialLinks.map((link) => (
-            <motion.a
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -4 }}
-              whileTap={{ scale: 0.95 }}
-              className={`p-4 rounded-2xl bg-zinc-900/50 border border-white/[0.05] text-zinc-400 transition-all duration-300 ${link.color} ${link.hoverBg} group`}
-            >
-              <link.icon className="w-6 h-6" />
-              <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1 bg-white text-black text-[10px] font-black rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                {link.name}
-              </span>
-            </motion.a>
-          ))}
-        </div>
-
         {/* Status & Year */}
         <div className="flex flex-col items-center md:items-end text-center md:text-right">
-          <div className="flex items-center gap-2 text-emerald-500 text-xs font-bold uppercase tracking-widest mb-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em] mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
             System Operational
           </div>
-          <p className="text-zinc-600 text-xs uppercase tracking-widest font-bold">
+          <p className="text-zinc-600 text-[10px] uppercase tracking-[0.3em] font-black">
             © {new Date().getFullYear()} CodePulse Core
           </p>
         </div>
