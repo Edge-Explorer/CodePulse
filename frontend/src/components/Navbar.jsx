@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FiGithub } from 'react-icons/fi';
+import { FiGithub, FiStar } from 'react-icons/fi';
 import { cn } from '../utils/cn';
 import { NoiseBackground } from './ui/NoiseBackground';
 
 const Navbar = ({ onConnect }) => {
+  const [stars, setStars] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.github.com/repos/Edge-Explorer/CodePulse')
+      .then(res => res.json())
+      .then(data => {
+        if (data.stargazers_count !== undefined) {
+          setStars(data.stargazers_count);
+        }
+      })
+      .catch(err => console.error("Error fetching stars:", err));
+  }, []);
+
   const navItems = [
     { name: 'Features', href: '/#features' },
     { name: 'Architecture', href: '/#features' }, // Pointing to features for now
@@ -27,13 +40,8 @@ const Navbar = ({ onConnect }) => {
           "relative rounded-full bg-zinc-950/90 backdrop-blur-xl px-1 sm:px-2 py-1.5",
           "flex items-center gap-2 sm:gap-6 min-w-fit"
         )}>
-          {/* Logo (Back to Home) */}
-          <Link to="/" className="pl-4 sm:pl-6 text-zinc-500 hover:text-indigo-400 transition-colors">
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/></svg>
-          </Link>
-
           {/* Links */}
-          <div className="flex items-center gap-1 sm:gap-4">
+          <div className="flex items-center gap-1 sm:gap-4 pl-4 sm:pl-6">
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -53,14 +61,26 @@ const Navbar = ({ onConnect }) => {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "group relative flex items-center gap-2 px-5 py-2 rounded-full",
+              "group relative flex items-center gap-2.5 px-5 py-2 rounded-full",
               "bg-white text-black text-[12px] font-bold transition-all duration-300",
               "hover:bg-zinc-200 active:scale-[0.96]"
             )}
           >
-            <FiGithub className="w-3.5 h-3.5" />
-            <span>Star on GitHub</span>
+            <div className="flex items-center gap-2">
+              <FiGithub className="w-4 h-4" />
+              <span>Star on GitHub</span>
+            </div>
             
+            {stars !== null && (
+              <>
+                <div className="h-3 w-[1px] bg-black/20 mx-0.5" />
+                <div className="flex items-center gap-1">
+                  <FiStar className="w-3.5 h-3.5 fill-black" />
+                  <span>{stars}</span>
+                </div>
+              </>
+            )}
+
             {/* Hover Glow for button */}
             <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 blur-md transition-opacity" />
           </a>
