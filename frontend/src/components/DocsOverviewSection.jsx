@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import ShinyText from './ui/ShinyText';
 
 const DocCard = ({ title, description, slug, image, delay = 0 }) => (
   <motion.div
@@ -102,7 +103,7 @@ const DocsOverviewSection = () => {
               viewport={{ once: true }}
               className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white mb-6"
             >
-              Technical <span className="text-indigo-500">Guides</span>.
+              <ShinyText text="Technical" speed={3} color="#ffffff" shineColor="#818cf8" /> <span className="text-indigo-500">Guides.</span>
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import ShinyText from './ui/ShinyText';
 
 const Node = ({ title, description, delay = 0, image, href }) => (
   <motion.div
@@ -67,9 +68,9 @@ const ArchitectureSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-extrabold tracking-tighter mb-6 text-white"
+            className="text-4xl md:text-6xl font-extrabold tracking-tighter text-white mb-6"
           >
-            System <span className="text-indigo-500">Topology</span>.
+            <ShinyText text="System" speed={3} color="#ffffff" shineColor="#818cf8" /> <span className="text-indigo-500">Topology.</span>
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}

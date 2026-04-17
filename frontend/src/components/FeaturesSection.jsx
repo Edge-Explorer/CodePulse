@@ -1,6 +1,7 @@
 import React from 'react';
 import { BentoGrid, BentoCard } from './ui/BentoGrid';
 import { motion } from 'framer-motion';
+import ShinyText from './ui/ShinyText';
 
 const features = [
   {
@@ -85,9 +86,9 @@ const FeaturesSection = () => {
            initial={{ opacity: 0, y: 20 }}
            whileInView={{ opacity: 1, y: 0 }}
            viewport={{ once: true }}
-           className="text-4xl md:text-6xl font-extrabold tracking-tighter mb-6 text-white"
+           className="text-4xl md:text-7xl font-extrabold tracking-tighter text-white mb-6 leading-[1.1]"
         >
-          Production-Grade <span className="text-indigo-500">Infrastructure</span>.
+          <ShinyText text="Production-Grade" speed={3} color="#ffffff" shineColor="#818cf8" /> <span className="text-indigo-500">Infrastructure.</span>
         </motion.h2>
         <motion.p 
            initial={{ opacity: 0, y: 20 }}

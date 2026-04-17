@@ -1,0 +1,12 @@
+.shiny-text {
+  display: inline-block;
+  background-position: 0% center;
+  transition: background-position 0s;
+}
+
+.shiny-text.disabled {
+  background-image: none !important;
+  background-clip: none !important;
+  -webkit-background-clip: none !important;
+  -webkit-text-fill-color: currentcolor !important;
+}
