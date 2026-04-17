@@ -61,10 +61,18 @@ const features = [
     name: "Intelligent Auto-Scaling",
     description: "Leveraging KEDA to dynamically scale scanning workers based on real-time Kafka consumer lag, optimizing cloud resource usage.",
     href: "/docs/auto-scaling",
-    cta: "Scaling Logic",
+    cta: "Auto-scaling Docs",
     className: "col-span-3 lg:col-span-2",
     background: (
-        <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-indigo-500/5 to-transparent" />
+      <div className="absolute inset-0 overflow-hidden">
+        <img 
+          src="/images/auto-scaling.png" 
+          alt="Auto Scaling" 
+          className="absolute right-[-5%] bottom-[-10%] w-[70%] h-auto opacity-70 object-cover grayscale-[0.2] brightness-90 group-hover:scale-110 transition-transform duration-700 ease-out"
+          style={{ maskImage: 'linear-gradient(to top left, black 20%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to top left, black 20%, transparent 80%)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent" />
+      </div>
     ),
   },
 ];
