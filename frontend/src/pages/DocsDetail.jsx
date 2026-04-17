@@ -211,6 +211,54 @@ const DOCS_DATA = {
     ],
     stack: ["Gemini 2.0", "Google AI SDK", "Prompt Engineering"],
     insight: "By using Gemini 2.0 Flash, we can analyze 100k+ lines of code in seconds, providing a level of architectural insight that was previously only possible via human manual review."
+  },
+  "github-oauth": {
+    title: "GitHub Authentication",
+    subtitle: "Secure, seamless access to your repositories.",
+    image: "/images/orchestration.png",
+    sections: [
+      {
+        heading: "Handshake Protocol",
+        body: "CodePulse uses GitHub OAuth 2.0 to manage user identities without ever seeing their passwords. When you click 'Connect', we redirect you to GitHub's secure authorization page. Once approved, GitHub sends back an authorization code."
+      },
+      {
+        heading: "JWT Security",
+        body: "Our API Gateway exchanges the code for an access token. We then issue a signed JSON Web Token (JWT) that contains your user ID. This token is sent with every subsequent API request, allowing us to maintain a high-security, stateless session across our microservices."
+      }
+    ],
+    technical: [
+      "OAuth 2.0 Authorization Code Flow for secure identity",
+      "Stateless session management via signed JWTs",
+      "RSA-256 algorithm for token signing and verification",
+      "Encrypted storage for GitHub access tokens",
+      "Secure cookie handling for frontend session persistence"
+    ],
+    stack: ["OAuth 2.0", "FastAPI", "JWT", "GitHub API"],
+    insight: "Stateless auth is the key to microservices. By using JWTs, any service in our cluster can verify who you are without having to check a central database every single time."
+  },
+  "deployment-journey": {
+    title: "Deployment Journey",
+    subtitle: "Lessons learned from the DevOps trenches.",
+    image: "/images/auto-scaling.png",
+    sections: [
+      {
+        heading: "The Debugging Loop",
+        body: "Building a local cluster taught us that 'it works on my machine' isn't enough. We encountered image pull failures, hardcoded hostnames, and Kubernetes caching issues that required a systematic approach to infrastructure as code."
+      },
+      {
+        heading: "Infrastructure Fixes",
+        body: "We transitioned from hardcoded service URLs to Kubernetes environment variables, moved to stable Bitnami-maintained images, and implemented strict image versioning (v1, v2) to ensure our deployments were always predictable and reproducible."
+      }
+    ],
+    technical: [
+      "Transitioned from localhost to internal K8s DNS (service:port)",
+      "Implemented imagePullPolicy: Never for local Docker development",
+      "Systematic image tagging (v2, v3) to bypass K8s caching",
+      "Configured Pydantic-Settings for cluster-aware configuration",
+      "Deployment of stable Kafka/Zookeeper stacks via Bitnami"
+    ],
+    stack: ["Kubernetes", "Docker", "DevOps", "Troubleshooting"],
+    insight: "Inside a Kubernetes pod, 'localhost' means that specific pod, not the cluster. Moving to K8s DNS (like 'kafka-service:9092') was the moment the whole system finally started talking to itself correctly."
   }
 };
 

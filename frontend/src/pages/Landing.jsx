@@ -6,6 +6,7 @@ import { BackgroundRippleEffect } from '../components/ui/BackgroundRippleEffect'
 import Navbar from '../components/Navbar';
 import ArchitectureSection from '../components/ArchitectureSection';
 import FeaturesSection from '../components/FeaturesSection';
+import DocsOverviewSection from '../components/DocsOverviewSection';
 
 const Meteor = ({ index }) => {
   const style = {
@@ -56,8 +57,11 @@ const Landing = ({ onAuthenticate }) => {
         </div>
       </div>
 
-      {/* Architecture Topology - NOW AFTER FEATURES */}
+      {/* Architecture Topology */}
       <ArchitectureSection />
+
+      {/* Technical Documentation Hub */}
+      <DocsOverviewSection />
       
     </div>
   );
