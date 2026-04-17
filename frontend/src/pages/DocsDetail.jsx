@@ -1,49 +1,132 @@
 import React, { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiTerminal, FiCpu, FiServer, FiActivity } from 'react-icons/fi';
 import Navbar from '../components/Navbar';
 
 const DOCS_DATA = {
   "high-availability": {
     title: "High-Availability Architecture",
-    description: "Building resilient systems that never go offline.",
-    content: "In production, downtime is the enemy. By moving away from a monolith to independent microservices, we ensured that if the Worker Service crashes during an AI scan, the API Gateway continues to serve users. We run 2 replicas of the API Gateway, meaning traffic is instantly rerouted to a healthy pod if one fails.",
+    subtitle: "Building resilient systems that never go offline.",
+    sections: [
+      {
+        heading: "The Problem",
+        body: "A monolithic application is a single point of failure. If one feature crashes, the entire system goes down. Users experience downtime, data can be lost mid-transaction, and recovery requires restarting the whole application. This is unacceptable for any system handling real workloads."
+      },
+      {
+        heading: "The Solution",
+        body: "CodePulse splits responsibilities into independent microservices. The API Gateway handles authentication and request routing. The Worker Service handles heavy AI scanning. If the Worker crashes mid-scan, the API Gateway continues serving users without interruption. We run 2 replicas of the API Gateway — if one pod fails, Kubernetes instantly routes traffic to the second. Zero downtime."
+      },
+      {
+        heading: "How It Works Internally",
+        body: "Kubernetes manages pod health through Liveness and Readiness probes. A Liveness probe checks if the process is alive. A Readiness probe checks if it can accept traffic. If either fails, Kubernetes automatically restarts or removes the pod from the Service load balancer. The ReplicaSet controller ensures the desired number of pods is always running."
+      }
+    ],
     technical: [
-      "ReplicaSet configuration for redundancy",
-      "Liveness and Readiness probes for health checks",
-      "Service-level load balancing inside the cluster"
-    ]
+      "ReplicaSet controller maintains desired pod count at all times",
+      "Liveness probes detect crashed processes and trigger automatic restarts",
+      "Readiness probes prevent routing traffic to pods still initializing",
+      "Service-level load balancing distributes requests across healthy replicas",
+      "Rolling updates enable zero-downtime deployments of new versions"
+    ],
+    stack: ["FastAPI", "Kubernetes", "Docker", "ReplicaSet"],
+    insight: "Running 2 replicas of the API Gateway means if one pod crashes, users are instantly routed to the second one. No downtime. This is called High Availability."
   },
   "event-driven": {
     title: "Event-Driven Scalability",
-    description: "Decoupling heavy AI workloads via Apache Kafka.",
-    content: "The API Gateway shouldn't wait for a 30-second AI scan to finish before responding to a user. By publishing tasks to a Kafka cluster, we achieve high-concurrency. Thousands of users can submit repos simultaneously—the workers will simply pick them up from the queue as capacity allows.",
+    subtitle: "Decoupling heavy AI workloads via Apache Kafka.",
+    sections: [
+      {
+        heading: "The Problem",
+        body: "A synchronous API that processes AI scans inline forces every user to wait 30+ seconds for a response. Under load, the server becomes a bottleneck — requests queue up, timeouts occur, and the entire system grinds to a halt. This architecture cannot scale."
+      },
+      {
+        heading: "The Solution",
+        body: "CodePulse uses Apache Kafka as a message broker between the API and Worker. When a user submits a repository, the API Gateway validates the request, persists the project to PostgreSQL, and publishes a scan task to a Kafka topic. The response is returned immediately. The Worker Service consumes the task asynchronously, clones the repo, and sends files to Gemini 2.0 Flash for analysis."
+      },
+      {
+        heading: "How It Works Internally",
+        body: "Kafka topics act as durable, ordered logs. Producers write messages; consumers read them at their own pace. If a worker crashes mid-scan, the message is not lost — Kafka retains it until the consumer acknowledges completion. Consumer Groups allow multiple workers to process tasks in parallel, each handling a different partition of the topic."
+      }
+    ],
     technical: [
-      "AIOKafka for asynchronous producing/consuming",
-      "Kafka Consumer Groups for parallel task processing",
-      "Message persistence for fault-tolerant scanning"
-    ]
+      "AIOKafka provides async producer and consumer implementations",
+      "Consumer Groups enable parallel processing across multiple workers",
+      "Message persistence ensures no scan task is lost during failures",
+      "Topic partitioning distributes load evenly across worker instances",
+      "Decoupled architecture eliminates API-to-Worker response coupling"
+    ],
+    stack: ["Apache Kafka", "Zookeeper", "AIOKafka", "FastAPI"],
+    insight: "The API Gateway does not perform the heavy AI analysis itself. It publishes a message to a Kafka topic, and the Worker Service picks it up asynchronously. This means thousands of users can submit requests without the API server becoming a bottleneck."
   },
   "orchestration": {
     title: "Containerized Orchestration",
-    description: "Managing a fleet of services with Kubernetes.",
-    content: "Docker ensures our environment is identical in local dev and production. Kubernetes takes those containers and manages their entire lifecycle—handling networking, secret management, and automatic restarts without manual intervention.",
+    subtitle: "Managing a fleet of services with Kubernetes.",
+    sections: [
+      {
+        heading: "The Problem",
+        body: "Running services directly on a host machine leads to environment-specific bugs, dependency conflicts, and manual process management. Scaling means SSH-ing into servers and starting processes by hand. There is no automatic recovery from crashes."
+      },
+      {
+        heading: "The Solution",
+        body: "Docker packages each service and its entire runtime environment into a portable container image. The same image runs identically on a developer laptop and in a cloud cluster. Kubernetes then manages the fleet of containers — restarting crashed ones, load-balancing traffic across replicas, and scaling based on demand."
+      },
+      {
+        heading: "How It Works Internally",
+        body: "Each service has a Dockerfile that defines its build steps. Kubernetes Deployment manifests declare the desired state — how many replicas, which image, what environment variables. The cluster continuously reconciles actual state with desired state. If a pod dies, the controller spins up a replacement. ClusterIP Services provide stable internal DNS names so services discover each other without hardcoded IPs."
+      }
+    ],
     technical: [
-      "K8s Deployment manifests for state management",
-      "ClusterIP services for internal communication",
-      "PVCs (Persistent Volume Claims) for data safety"
-    ]
+      "Multi-stage Dockerfiles for optimized production images",
+      "Kubernetes Deployments for declarative state management",
+      "ClusterIP Services for stable internal service discovery",
+      "ConfigMaps and Secrets for environment configuration",
+      "imagePullPolicy: Never for local development with Docker Desktop"
+    ],
+    stack: ["Docker", "Kubernetes", "kubectl", "Docker Desktop"],
+    insight: "After rebuilding a Docker image, Kubernetes was still using the old cached version. Fix: tagged the new image as v2 and updated the deployment manifest to force a rollout."
   },
   "auto-scaling": {
     title: "Intelligent Auto-Scaling",
-    description: "Optimizing cloud resources with KEDA.",
-    content: "We don't want to pay for 10 workers when there are zero tasks. KEDA (Kubernetes Event-driven Autoscaling) monitors the depth of our Kafka queues and only spins up more Worker pods when there is a backlog of repos to scan.",
+    subtitle: "Optimizing cloud resources with KEDA.",
+    sections: [
+      {
+        heading: "The Problem",
+        body: "Running a fixed number of worker pods wastes resources. During low traffic, idle workers consume compute and cost money. During traffic spikes, a fixed pool cannot handle the backlog, leading to increased scan times and degraded user experience."
+      },
+      {
+        heading: "The Solution",
+        body: "KEDA (Kubernetes Event-driven Autoscaling) monitors the depth of our Kafka consumer queues in real-time. When consumer lag increases — meaning tasks are piling up faster than workers can process them — KEDA automatically scales up the Worker Deployment. When the queue drains, it scales back down to zero."
+      },
+      {
+        heading: "How It Works Internally",
+        body: "KEDA introduces a ScaledObject custom resource that defines which metric to watch and how to scale. For CodePulse, the trigger is Kafka consumer lag on the scan-tasks topic. KEDA periodically polls the lag metric and adjusts the replica count of the Worker Deployment accordingly. This integrates with the native Kubernetes Horizontal Pod Autoscaler under the hood."
+      }
+    ],
     technical: [
-      "ScaledObject configurations for Kafka lag metrics",
-      "Scale-to-zero capability for cost efficiency",
-      "Horizontal Pod Autoscaling (HPA) integration"
-    ]
+      "ScaledObject CRD defines scaling triggers and thresholds",
+      "Kafka consumer lag metric drives scaling decisions",
+      "Scale-to-zero eliminates cost during idle periods",
+      "Horizontal Pod Autoscaler integration for smooth scaling",
+      "Cooldown periods prevent rapid scale-up/scale-down oscillation"
+    ],
+    stack: ["KEDA", "Kubernetes", "Kafka", "HPA"],
+    insight: "We don't want to pay for 10 workers when there are zero tasks. KEDA monitors queue depth and only spins up more Worker pods when there is a real backlog of repositories to scan."
+  }
+};
+
+// Stagger animation for children
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.12 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
   }
 };
 
@@ -53,86 +136,124 @@ const DocsDetail = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [slug]);
 
   if (!data) return <div className="text-white p-20 text-center">Documentation not found.</div>;
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-indigo-500/30">
-      <Navbar onConnect={() => window.location.href = '/'} />
+    <div className="min-h-screen bg-black text-white selection:bg-indigo-500/30 overflow-hidden">
+      <Navbar />
 
-      <main className="max-w-4xl mx-auto pt-40 pb-20 px-6">
-        <Link 
-          to="/" 
-          className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors mb-12 group w-fit"
-        >
-          <FiArrowLeft className="group-hover:-translate-x-1 transition-transform" />
-          Back to Overview
-        </Link>
+      {/* Ambient Background Glow */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-indigo-500/[0.03] blur-[150px] rounded-full pointer-events-none" />
+      <div className="fixed bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/[0.02] blur-[120px] rounded-full pointer-events-none" />
 
+      <main className="relative max-w-5xl mx-auto pt-40 pb-32 px-6 md:px-12">
         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.6 }}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
         >
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-4 text-white">
-            {data.title}
-          </h1>
-          <p className="text-xl text-indigo-400 font-medium mb-12 italic opacity-80">
-            {data.description}
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-white/10 pt-12">
-            <div className="md:col-span-2 space-y-8">
-              <section>
-                <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                  <FiTerminal className="text-indigo-500" />
-                  Implementation Logic
-                </h2>
-                <p className="text-zinc-400 leading-relaxed text-lg">
-                  {data.content}
-                </p>
-              </section>
-
-              <section className="p-8 rounded-3xl bg-zinc-900/30 border border-white/5 relative overflow-hidden group">
-                 {/* Subtle glowing background */}
-                <div className="absolute -right-20 -top-20 w-64 h-64 bg-indigo-500/10 blur-[100px] pointer-events-none" />
-                
-                <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-white">
-                    <FiActivity className="text-indigo-500" />
-                    Technical Constraints Handles
-                </h3>
-                <ul className="space-y-4">
-                  {data.technical.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3 text-zinc-500 hover:text-zinc-300 transition-colors">
-                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </section>
+          {/* Title Block */}
+          <motion.div variants={itemVariants} className="mb-20">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px flex-1 max-w-[60px] bg-gradient-to-r from-indigo-500 to-transparent" />
+              <span className="text-[11px] uppercase tracking-[0.2em] text-indigo-400 font-medium">Deep Dive</span>
             </div>
+            <h1 className="text-5xl md:text-8xl font-extrabold tracking-[-0.04em] leading-[0.9] mb-6 text-white">
+              {data.title}
+            </h1>
+            <p className="text-lg md:text-xl text-zinc-500 max-w-2xl leading-relaxed">
+              {data.subtitle}
+            </p>
+          </motion.div>
 
-            <aside className="space-y-8">
-              <div className="p-6 rounded-2xl bg-zinc-950 border border-white/5 space-y-4">
-                 <h4 className="text-xs uppercase tracking-widest text-zinc-600 font-bold">Stack Context</h4>
-                 <div className="flex flex-wrap gap-2">
-                    {['FastAPI', 'Kafka', 'K8s', 'Gemini AI'].map(tag => (
-                      <span key={tag} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] text-zinc-400">
-                        {tag}
-                      </span>
-                    ))}
-                 </div>
+          {/* Content Sections */}
+          <div className="space-y-20">
+            {data.sections.map((section, i) => (
+              <motion.section key={i} variants={itemVariants}>
+                <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 md:gap-12">
+                  <div className="md:pt-1">
+                    <span className="text-[11px] uppercase tracking-[0.15em] text-zinc-600 font-bold">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-6">
+                      {section.heading}
+                    </h2>
+                    <p className="text-zinc-400 text-base md:text-lg leading-[1.8]">
+                      {section.body}
+                    </p>
+                  </div>
+                </div>
+              </motion.section>
+            ))}
+          </div>
+
+          {/* Divider */}
+          <motion.div variants={itemVariants} className="my-24">
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          </motion.div>
+
+          {/* Technical Details + Sidebar */}
+          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-12 md:gap-16">
+            {/* Technical Points */}
+            <div>
+              <div className="flex items-center gap-3 mb-10">
+                <div className="h-px flex-1 max-w-[40px] bg-gradient-to-r from-indigo-500 to-transparent" />
+                <span className="text-[11px] uppercase tracking-[0.2em] text-indigo-400 font-medium">Technical Detail</span>
               </div>
               
-              <div className="p-6 rounded-2xl bg-indigo-500/5 border border-indigo-500/10">
-                 <h4 className="text-xs uppercase tracking-widest text-indigo-400 font-bold mb-4 italic">Deployment Insight</h4>
-                 <p className="text-xs text-zinc-500 leading-relaxed italic">
-                    Successfully deployed in a local cluster using Docker Desktop, proving the transition from single-folder apps to orchestrated services.
-                 </p>
+              <div className="space-y-0">
+                {data.technical.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.08, duration: 0.5 }}
+                    viewport={{ once: true }}
+                    className="group flex items-start gap-5 py-5 border-b border-white/[0.04] hover:border-indigo-500/20 transition-colors duration-500"
+                  >
+                    <span className="text-[11px] text-zinc-700 font-mono mt-1 select-none group-hover:text-indigo-500 transition-colors duration-500">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <p className="text-zinc-400 text-[15px] leading-relaxed group-hover:text-zinc-300 transition-colors duration-500">
+                      {item}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <aside className="space-y-8">
+              {/* Stack Tags */}
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/[0.04]">
+                <h4 className="text-[10px] uppercase tracking-[0.2em] text-zinc-600 font-bold mb-5">Stack</h4>
+                <div className="flex flex-wrap gap-2">
+                  {data.stack.map(tag => (
+                    <span 
+                      key={tag} 
+                      className="px-3 py-1.5 bg-white/[0.03] border border-white/[0.06] rounded-lg text-[11px] text-zinc-500 font-mono hover:border-indigo-500/30 hover:text-indigo-400 transition-all duration-300 cursor-default"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Insight Card */}
+              <div className="relative p-6 rounded-2xl border border-indigo-500/[0.08] overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.04] to-transparent pointer-events-none" />
+                <h4 className="relative text-[10px] uppercase tracking-[0.2em] text-indigo-500/80 font-bold mb-4">From the README</h4>
+                <p className="relative text-[13px] text-zinc-500 leading-[1.7]">
+                  {data.insight}
+                </p>
               </div>
             </aside>
-          </div>
+          </motion.div>
+
         </motion.div>
       </main>
     </div>

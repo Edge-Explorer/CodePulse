@@ -10,7 +10,15 @@ const features = [
     cta: "Architecture Docs",
     className: "col-span-3 lg:col-span-2",
     background: (
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent" />
+      <div className="absolute inset-0 overflow-hidden">
+        <img 
+          src="/images/high-availability.png" 
+          alt="High Availability" 
+          className="absolute right-[-10%] top-[-10%] w-[70%] h-auto opacity-70 object-cover grayscale-[0.2] brightness-90 group-hover:scale-110 transition-transform duration-700 ease-out"
+          style={{ maskImage: 'linear-gradient(to left, black 20%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to left, black 20%, transparent 80%)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent" />
+      </div>
     ),
   },
   {
