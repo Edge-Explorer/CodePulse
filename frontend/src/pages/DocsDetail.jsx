@@ -7,6 +7,7 @@ const DOCS_DATA = {
   "high-availability": {
     title: "High-Availability Architecture",
     subtitle: "Building resilient systems that never go offline.",
+    image: "/images/high-availability.png",
     sections: [
       {
         heading: "The Problem",
@@ -34,6 +35,7 @@ const DOCS_DATA = {
   "event-driven": {
     title: "Event-Driven Scalability",
     subtitle: "Decoupling heavy AI workloads via Apache Kafka.",
+    image: "/images/event-driven.png",
     sections: [
       {
         heading: "The Problem",
@@ -61,6 +63,7 @@ const DOCS_DATA = {
   "orchestration": {
     title: "Containerized Orchestration",
     subtitle: "Managing a fleet of services with Kubernetes.",
+    image: "/images/orchestration.png",
     sections: [
       {
         heading: "The Problem",
@@ -88,6 +91,7 @@ const DOCS_DATA = {
   "auto-scaling": {
     title: "Intelligent Auto-Scaling",
     subtitle: "Optimizing cloud resources with KEDA.",
+    image: "/images/auto-scaling.png",
     sections: [
       {
         heading: "The Problem",
@@ -141,14 +145,29 @@ const DocsDetail = () => {
   if (!data) return <div className="text-white p-20 text-center">Documentation not found.</div>;
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-indigo-500/30 overflow-hidden">
+    <div className="min-h-screen bg-black text-white selection:bg-indigo-500/30 overflow-hidden relative">
       <Navbar />
 
-      {/* Ambient Background Glow */}
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-indigo-500/[0.03] blur-[150px] rounded-full pointer-events-none" />
-      <div className="fixed bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/[0.02] blur-[120px] rounded-full pointer-events-none" />
+      {/* Subtle Ghost Visual from Bento Grid */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={{ opacity: 0.15, scale: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="fixed top-[-10%] right-[-10%] w-[100%] h-auto pointer-events-none z-0"
+      >
+        <img 
+          src={data.image} 
+          alt="" 
+          className="w-full h-full object-contain brightness-75"
+          style={{ maskImage: 'radial-gradient(circle at center, black, transparent 80%)', WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)' }}
+        />
+      </motion.div>
 
-      <main className="relative max-w-5xl mx-auto pt-40 pb-32 px-6 md:px-12">
+      {/* Ambient Background Glow */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-indigo-500/[0.03] blur-[150px] rounded-full pointer-events-none z-0" />
+      <div className="fixed bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/[0.02] blur-[120px] rounded-full pointer-events-none z-0" />
+
+      <main className="relative max-w-5xl mx-auto pt-40 pb-32 px-6 md:px-12 z-10">
         <motion.div
           variants={containerVariants}
           initial="hidden"
