@@ -1,26 +1,26 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
+import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
 const Footer = () => {
   const socialLinks = [
     {
       name: 'GitHub',
-      icon: Github,
+      icon: FaGithub,
       url: 'https://github.com/Edge-Explorer',
       color: 'hover:text-white',
       hoverBg: 'hover:bg-zinc-800'
     },
     {
       name: 'LinkedIn',
-      icon: Linkedin,
+      icon: FaLinkedin,
       url: 'https://linkedin.com/in/karan-shelar-779381343',
       color: 'hover:text-blue-400',
       hoverBg: 'hover:bg-blue-500/10'
     },
     {
       name: 'Email',
-      icon: Mail,
+      icon: FaEnvelope,
       url: 'mailto:karanshelar8775@gmail.com',
       color: 'hover:text-red-400',
       hoverBg: 'hover:bg-red-500/10'
@@ -28,7 +28,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer id="contact" className="relative py-20 px-6 bg-black border-t border-white/[0.05] z-10 pointer-events-none">
+    <footer className="relative py-20 px-6 bg-black border-t border-white/[0.05] z-10 pointer-events-none">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
         
         {/* Brand & Name */}

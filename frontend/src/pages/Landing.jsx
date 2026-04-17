@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import ArchitectureSection from '../components/ArchitectureSection';
 import FeaturesSection from '../components/FeaturesSection';
 import DocsOverviewSection from '../components/DocsOverviewSection';
+import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 
 const Meteor = ({ index }) => {
@@ -64,7 +65,10 @@ const Landing = ({ onAuthenticate }) => {
       {/* Technical Documentation Hub */}
       <DocsOverviewSection />
 
-      {/* Footer / Contact Section */}
+      {/* Prominent Contact Hub */}
+      <ContactSection />
+
+      {/* Footer / Credits */}
       <Footer />
       
     </div>
