@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ShinyText from './ui/ShinyText';
+import { NoiseBackground } from './ui/NoiseBackground';
+import { cn } from '../utils/cn';
 
 const DocCard = ({ title, description, slug, image, delay = 0 }) => (
   <motion.div
@@ -123,12 +125,24 @@ const DocsOverviewSection = () => {
             viewport={{ once: true }}
             className="hidden md:block pointer-events-auto"
           >
-            <Link 
-              to="/docs/high-availability"
-              className="px-8 py-4 rounded-full bg-white text-black text-[13px] font-bold hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95"
+            <NoiseBackground
+              containerClassName="w-fit p-1 rounded-full"
+              gradientColors={["rgb(99, 102, 241)", "rgb(168, 85, 247)"]}
             >
-              Start Reading
-            </Link>
+              <Link 
+                to="/docs/high-availability"
+                className={cn(
+                  "group flex items-center gap-2 px-6 py-2.5 rounded-full text-[13px] font-bold transition-all duration-100 active:scale-95",
+                  "bg-gradient-to-r from-neutral-100 via-neutral-100 to-white text-black shadow-[0px_1px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)]",
+                  "dark:from-black dark:via-black dark:to-neutral-900 dark:text-white dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)]"
+                )}
+              >
+                Start Reading
+                <span className="opacity-50 group-hover:translate-x-1 group-hover:opacity-100 transition-all">
+                  &rarr;
+                </span>
+              </Link>
+            </NoiseBackground>
           </motion.div>
         </div>
 
