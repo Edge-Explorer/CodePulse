@@ -25,10 +25,18 @@ const features = [
     name: "Event-Driven Scalability",
     description: "Apache Kafka integration decouples API logic from heavy AI processing, allowing for high-concurrency request handling.",
     href: "/docs/event-driven",
-    cta: "Kafka Service",
+    cta: "Scalability Docs",
     className: "col-span-3 lg:col-span-1",
     background: (
-      <div className="absolute inset-0 bg-gradient-to-bl from-purple-500/10 via-transparent to-transparent" />
+      <div className="absolute inset-0 overflow-hidden">
+        <img 
+          src="/images/event-driven.png" 
+          alt="Event Driven" 
+          className="absolute right-[-20%] bottom-[-10%] w-[100%] h-auto opacity-70 object-cover grayscale-[0.2] brightness-90 group-hover:scale-110 transition-transform duration-700 ease-out"
+          style={{ maskImage: 'linear-gradient(to top left, black 20%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to top left, black 20%, transparent 80%)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent" />
+      </div>
     ),
   },
   {
