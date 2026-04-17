@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, User, Mail, MessageSquare, Check, AlertCircle } from 'lucide-react';
+import { FaTimes, FaPaperPlane, FaUser, FaEnvelope, FaCommentDots, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
 import { NoiseBackground } from './ui/NoiseBackground';
 import { cn } from '../utils/cn';
 import axios from 'axios';
@@ -15,7 +15,7 @@ const ContactModal = ({ isOpen, onClose, recipientEmail }) => {
   const [status, setStatus] = useState('idle'); // idle, loading, success, error
 
   // Body Scroll Lock
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       setStatus('idle');
@@ -47,9 +47,9 @@ const ContactModal = ({ isOpen, onClose, recipientEmail }) => {
   const getButtonContent = () => {
     switch(status) {
       case 'loading': return <span className="flex items-center gap-2 animate-pulse">Transmitting...</span>;
-      case 'success': return <span className="flex items-center gap-2 text-emerald-400 font-bold"><Check className="w-4 h-4" /> Message Sent!</span>;
-      case 'error': return <span className="flex items-center gap-2 text-amber-400 font-bold"><AlertCircle className="w-4 h-4" /> Failed - Try Again</span>;
-      default: return <>Transmit Conduit <Send className="w-3 h-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>;
+      case 'success': return <span className="flex items-center gap-2 text-emerald-400 font-bold"><FaCheck className="w-4 h-4" /> Message Sent!</span>;
+      case 'error': return <span className="flex items-center gap-2 text-amber-400 font-bold"><FaExclamationTriangle className="w-4 h-4" /> Failed - Try Again</span>;
+      default: return <>Transmit Conduit <FaPaperPlane className="w-3 h-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>;
     }
   };
 
@@ -85,7 +85,7 @@ const ContactModal = ({ isOpen, onClose, recipientEmail }) => {
             <div className="flex items-center justify-between p-5 border-b border-white/5 bg-zinc-900/50">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center border border-red-500/20">
-                  <Mail className="w-4 h-4 text-red-400" />
+                  <FaEnvelope className="w-4 h-4 text-red-400" />
                 </div>
                 <h2 className="text-white font-black text-sm tracking-tight italic">Quick Transmit</h2>
               </div>
@@ -93,7 +93,7 @@ const ContactModal = ({ isOpen, onClose, recipientEmail }) => {
                 onClick={onClose}
                 className="p-1.5 rounded-full hover:bg-white/5 text-zinc-500 hover:text-white transition-all"
               >
-                <X className="w-4 h-4" />
+                <FaTimes className="w-4 h-4" />
               </button>
             </div>
 
@@ -103,7 +103,7 @@ const ContactModal = ({ isOpen, onClose, recipientEmail }) => {
                 <div className="space-y-1">
                   <label className="text-zinc-600 text-[8px] uppercase tracking-widest font-black ml-1">From</label>
                   <div className="relative group">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-600 group-focus-within:text-red-400 transition-colors" />
+                    <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-600 group-focus-within:text-red-400 transition-colors" />
                     <input 
                       required
                       type="text"
@@ -117,7 +117,7 @@ const ContactModal = ({ isOpen, onClose, recipientEmail }) => {
                 <div className="space-y-1">
                   <label className="text-zinc-600 text-[8px] uppercase tracking-widest font-black ml-1">Contact</label>
                   <div className="relative group">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-600 group-focus-within:text-red-400 transition-colors" />
+                    <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-zinc-600 group-focus-within:text-red-400 transition-colors" />
                     <input 
                       required
                       type="email"

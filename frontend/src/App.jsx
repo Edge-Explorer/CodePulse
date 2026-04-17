@@ -3,19 +3,21 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LandingPage from './pages/Landing';
 import DashboardPage from './pages/Dashboard';
 import DocsDetail from './pages/DocsDetail';
+import AuthCallback from './pages/AuthCallback';
 
 const App = () => {
-  // Simple check for simulation, in real app we'd use a context/provider
-  const isAuthenticated = localStorage.getItem('auth') === 'true';
+  const isAuthenticated = !!localStorage.getItem('token');
+
+  const handleLogin = () => {
+    window.location.href = 'http://localhost:8000/auth/github/login';
+  };
 
   return (
     <Router>
       <div className="app-root">
         <Routes>
-          <Route path="/" element={<LandingPage onAuthenticate={() => {
-            localStorage.setItem('auth', 'true');
-            window.location.href = '/dashboard';
-          }} />} />
+          <Route path="/" element={<LandingPage onAuthenticate={handleLogin} />} />
+          <Route path="/callback" element={<AuthCallback />} />
           
           <Route path="/dashboard" element={
             isAuthenticated ? <DashboardPage /> : <Navigate to="/" />

@@ -11,7 +11,12 @@ const Navbar = ({ onConnect }) => {
   const location = useLocation();
   const isDocsPage = location.pathname.startsWith('/docs/');
 
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) setUser(JSON.parse(savedUser));
+
     // Fetch Stars only if needed or keep for consistency
     fetch('https://api.github.com/repos/Edge-Explorer/CodePulse')
       .then(res => res.json())
@@ -47,6 +52,17 @@ const Navbar = ({ onConnect }) => {
       };
     }
   }, [isDocsPage]);
+
+  const handleLogin = () => {
+    window.location.href = 'http://localhost:8000/auth/github/login';
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+    window.location.href = '/';
+  };
 
   const navItems = [
     { name: 'Features', id: 'features', href: '/#features' },
@@ -119,31 +135,47 @@ const Navbar = ({ onConnect }) => {
 
               <div className="h-4 w-px bg-zinc-800 mx-1 sm:mx-2" />
 
-              <a
-                href="https://github.com/Edge-Explorer/CodePulse"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  "group relative flex items-center gap-2.5 px-5 py-2 rounded-full",
-                  "bg-white text-black text-[12px] font-bold transition-all duration-300",
-                  "hover:bg-zinc-200 active:scale-[0.96]"
-                )}
-              >
-                <div className="flex items-center gap-2">
-                  <FiGithub className="w-4 h-4" />
-                  <span>Star on GitHub</span>
+              {user ? (
+                <div className="flex items-center gap-3 pr-2">
+                   <Link 
+                    to="/dashboard"
+                    className="flex items-center gap-2 pl-2 pr-4 py-1.5 rounded-full bg-indigo-500 text-white text-[11px] font-bold hover:bg-indigo-600 transition-all"
+                   >
+                     <img src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.username}`} className="w-5 h-5 rounded-full border border-white/20" alt="avatar" />
+                     <span>Dashboard</span>
+                   </Link>
+                   <button 
+                    onClick={handleLogout}
+                    className="text-zinc-500 hover:text-red-400 text-[10px] font-bold uppercase tracking-wider px-2 transition-colors"
+                   >
+                     Logout
+                   </button>
                 </div>
-                {stars !== null && (
-                  <>
-                    <div className="h-3 w-[1px] bg-black/20 mx-0.5" />
-                    <div className="flex items-center gap-1">
-                      <FiStar className="w-3.5 h-3.5 fill-black" />
-                      <span>{stars}</span>
-                    </div>
-                  </>
-                )}
-                <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 blur-md transition-opacity" />
-              </a>
+              ) : (
+                <button
+                  onClick={handleLogin}
+                  className={cn(
+                    "group relative flex items-center gap-2.5 px-5 py-2 rounded-full",
+                    "bg-white text-black text-[12px] font-bold transition-all duration-300",
+                    "hover:bg-zinc-200 active:scale-[0.96]"
+                  )}
+                >
+                  <div className="flex items-center gap-2">
+                    <FiGithub className="w-4 h-4" />
+                    <span>Connect GitHub</span>
+                  </div>
+                  {stars !== null && (
+                    <>
+                      <div className="h-3 w-[1px] bg-black/20 mx-0.5" />
+                      <div className="flex items-center gap-1">
+                        <FiStar className="w-3.5 h-3.5 fill-black" />
+                        <span>{stars}</span>
+                      </div>
+                    </>
+                  )}
+                  <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 blur-md transition-opacity" />
+                </button>
+              )}
             </div>
           )}
         </div>
