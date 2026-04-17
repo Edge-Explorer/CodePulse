@@ -14,6 +14,11 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     KAFKA_BOOTSTRAP_SERVERS: str = "localhost:9092"
 
+    SMTP_SERVER: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+
     ACCESS_TOKEN_EXPIRE_MINUTES: int= 60
     
     model_config = SettingsConfigDict(

@@ -43,3 +43,13 @@ spec:
             secretKeyRef:
               name: codepulse-secrets
               key: JWT_SECRET
+        - name: SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: codepulse-secrets
+              key: SMTP_USER
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: codepulse-secrets
+              key: SMTP_PASSWORD

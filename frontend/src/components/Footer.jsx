@@ -28,41 +28,38 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative py-20 px-6 bg-black border-t border-white/[0.05] z-10 pointer-events-none">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
-        
+    <footer className="relative pb-16 px-6 z-10 pointer-events-none">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="max-w-4xl mx-auto p-10 rounded-[2.5rem] bg-zinc-950/40 backdrop-blur-2xl border border-white/5 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden relative"
+      >
+        {/* Subtle Internal Glow */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-red-500/5 pointer-events-none" />
+
         {/* Brand & Name */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-2 mb-4"
-          >
-            <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center font-black text-black text-sm">CP</div>
-            <span className="text-xl font-black tracking-tighter text-white italic">CODEPULSE</span>
-          </motion.div>
-          <p className="text-zinc-500 text-sm max-w-xs leading-relaxed">
-            Architecting the future of AI-driven DevOps. 
+        <div className="flex flex-col items-center md:items-start text-center md:text-left relative z-10">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-7 h-7 rounded-lg bg-indigo-500 flex items-center justify-center font-black text-black text-[10px]">CP</div>
+            <span className="text-lg font-black tracking-tighter text-white italic">CODEPULSE</span>
+          </div>
+          <p className="text-zinc-500 text-[11px] leading-relaxed font-medium">
             Designed and Developed by <span className="text-white font-bold">Karan Shelar</span>.
           </p>
         </div>
 
         {/* Status & Year */}
-        <div className="flex flex-col items-center md:items-end text-center md:text-right">
-          <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em] mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-            System Operational
+        <div className="flex flex-col items-center md:items-end text-center md:text-right relative z-10">
+          <div className="flex items-center gap-2 text-emerald-500 text-[9px] font-black uppercase tracking-[0.2em] mb-2 bg-emerald-500/5 px-3 py-1 rounded-full border border-emerald-500/10">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            System Live
           </div>
-          <p className="text-zinc-600 text-[10px] uppercase tracking-[0.3em] font-black">
-            © {new Date().getFullYear()} CodePulse Core
+          <p className="text-zinc-600 text-[9px] uppercase tracking-[0.3em] font-black">
+            © {new Date().getFullYear()} Core Protocol
           </p>
         </div>
-
-      </div>
-
-      {/* Background Decorative Gradient */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-gradient-to-t from-indigo-500/5 to-transparent pointer-events-none" />
+      </motion.div>
     </footer>
   );
 };

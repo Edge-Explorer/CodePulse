@@ -1,6 +1,6 @@
 from fastapi import FastAPI 
 from src.core.config import settings
-from src.routers import auth, users, projects
+from src.routers import auth, users, projects, contact
 from src.core.kafka import init_kafka, stop_kafka
 from contextlib import asynccontextmanager
 
@@ -20,6 +20,7 @@ app= FastAPI(
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(projects.router)
+app.include_router(contact.router)
 
 @app.get("/health", tags=["System"])
 async def health_check():

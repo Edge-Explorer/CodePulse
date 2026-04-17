@@ -67,9 +67,6 @@ const Landing = ({ onAuthenticate }) => {
 
       {/* Prominent Contact Hub */}
       <ContactSection />
-
-      {/* Footer / Credits */}
-      <Footer />
       
     </div>
   );
