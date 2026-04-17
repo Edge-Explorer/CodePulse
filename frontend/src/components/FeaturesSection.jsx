@@ -43,10 +43,18 @@ const features = [
     name: "Containerized Orchestration",
     description: "Portable Docker images managed by Kubernetes. Automating the lifecycle of your application fleet with zero-downtime rolling updates.",
     href: "/docs/orchestration",
-    cta: "K8s Manifests",
+    cta: "Orchestration Docs",
     className: "col-span-3 lg:col-span-1",
     background: (
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-emerald-500/5 to-transparent" />
+      <div className="absolute inset-0 overflow-hidden">
+        <img 
+          src="/images/orchestration.png" 
+          alt="Orchestration" 
+          className="absolute left-[-10%] bottom-[-10%] w-[100%] h-auto opacity-70 object-cover grayscale-[0.2] brightness-90 group-hover:scale-110 transition-transform duration-700 ease-out"
+          style={{ maskImage: 'linear-gradient(to top right, black 20%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to top right, black 20%, transparent 80%)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent" />
+      </div>
     ),
   },
   {
