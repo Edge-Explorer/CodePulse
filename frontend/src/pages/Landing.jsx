@@ -20,36 +20,40 @@ const Landing = ({ onAuthenticate }) => {
   const meteors = Array.from({ length: 20 });
 
   return (
-    <div className="container" style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
+    <div className="relative min-h-screen overflow-hidden bg-black">
       
-      {/* Floating Navigation */}
+      {/* Floating Navigation - highest z so it's always clickable */}
       <Navbar onConnect={onAuthenticate} />
 
-      {/* Background Ripple Effect */}
-      <div className="absolute inset-x-0 top-0 h-[40rem] z-[2]">
+      {/* Background Ripple Effect - covers ENTIRE page, lowest interactive layer */}
+      <div className="fixed inset-0 z-[1]">
         <BackgroundRippleEffect />
       </div>
 
       {/* Subtle Meteor Shower Overlay */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: -1, pointerEvents: 'none', opacity: 0.15 }}>
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-15">
         {meteors.map((_, i) => <Meteor key={i} index={i} />)}
       </div>
 
-      {/* Content Layer */}
-      <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '40px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', pointerEvents: 'none' }}>
+      {/* Content Layer - pointer-events-none so clicks pass through to ripple */}
+      <div className="relative z-[5] text-center pt-10 flex flex-col items-center pointer-events-none">
         
         {/* Giant Interactive Brand Name */}
-        <div className="w-full h-[15rem] md:h-[25rem] flex items-center justify-center -mt-10 mr-4" style={{ pointerEvents: 'auto' }}>
+        <div className="w-full h-[15rem] md:h-[25rem] flex items-center justify-center -mt-10 mr-4 pointer-events-auto">
           <TextHoverEffect text="CODEPULSE" />
         </div>
 
-        <div style={{ pointerEvents: 'auto' }}>
+        <div className="pointer-events-auto">
           <AuthButton onClick={onAuthenticate} className="-mt-12" />
         </div>
       </div>
 
-      {/* Features Grid */}
-      <FeaturesSection />
+      {/* Features Grid - pointer-events-none on wrapper, auto on cards */}
+      <div className="relative z-[5] pointer-events-none">
+        <div className="pointer-events-auto">
+          <FeaturesSection />
+        </div>
+      </div>
     </div>
   );
 };

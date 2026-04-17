@@ -1,19 +1,18 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useEffect } from "react";
 import { cn } from "../../utils/cn";
 
 const ROWS = 10;
 const COLS = 30;
-const CELL_SIZE = 56;
 
 /**
  * BackgroundRippleEffect Component - CSS Animation Edition
- * Uses real CSS animations with custom --delay properties for smooth ripple spread.
- * No React state re-renders — pure CSS performance.
+ * Uses a GLOBAL window click listener so the ripple fires everywhere,
+ * regardless of what element is on top. No z-index battles needed.
  */
 export const BackgroundRippleEffect = ({ className }) => {
   const gridRef = useRef(null);
 
-  const handleClick = useCallback((e) => {
+  const triggerRipple = useCallback((e) => {
     const grid = gridRef.current;
     if (!grid) return;
 
@@ -55,12 +54,17 @@ export const BackgroundRippleEffect = ({ className }) => {
     }
   }, []);
 
+  // Listen on the WINDOW so clicks on ANY element trigger the ripple
+  useEffect(() => {
+    window.addEventListener("click", triggerRipple);
+    return () => window.removeEventListener("click", triggerRipple);
+  }, [triggerRipple]);
+
   return (
     <div
       ref={gridRef}
-      onClick={handleClick}
       className={cn(
-        "absolute inset-0 z-0 overflow-hidden cursor-pointer",
+        "absolute inset-0 z-0 overflow-hidden pointer-events-none",
         className
       )}
       style={{
