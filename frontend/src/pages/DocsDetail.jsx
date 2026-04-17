@@ -115,6 +115,102 @@ const DOCS_DATA = {
     ],
     stack: ["KEDA", "Kubernetes", "Kafka", "HPA"],
     insight: "We don't want to pay for 10 workers when there are zero tasks. KEDA monitors queue depth and only spins up more Worker pods when there is a real backlog of repositories to scan."
+  },
+  "api-gateway": {
+    title: "API Gateway",
+    subtitle: "The entry point for all CodePulse traffic.",
+    image: "/images/api-gateway.png",
+    sections: [
+      {
+        heading: "Request Routing",
+        body: "The API Gateway acts as the central traffic controller. Built with FastAPI and Traefik, it handles SSL termination, request validation, and intelligent routing to internal microservices."
+      },
+      {
+        heading: "Security & Auth",
+        body: "Every request is intercepted for GitHub OAuth validation. We use JWT tokens to maintain stateless session security across the cluster, ensuring that only authorized users can initiate repository scans."
+      }
+    ],
+    technical: [
+      "Traefik Ingress controller for dynamic routing",
+      "GitHub OAuth 2.0 integration for secure access",
+      "Pydantic models for strict request/response validation",
+      "Stateless JWT authentication for scalable sessions",
+      "Rate limiting to prevent API abuse and DoS attacks"
+    ],
+    stack: ["FastAPI", "Traefik", "OAuth 2.0", "JWT"],
+    insight: "The Gateway is the first line of defense. By handling auth here, we ensure our internal workers never process unauthenticated requests."
+  },
+  "kafka-cluster": {
+    title: "Kafka Cluster",
+    subtitle: "High-performance distributed message broker.",
+    image: "/images/kafka-cluster.png",
+    sections: [
+      {
+        heading: "Decoupling Services",
+        body: "Kafka is the backbone of CodePulse. It decouples the fast API Gateway from the slower AI analysis workers. This 'event-driven' approach allows the system to absorb massive traffic spikes without crashing."
+      },
+      {
+        heading: "Data Persistence",
+        body: "Unlike traditional queues, Kafka stores events on disk. If a worker fails, the scan task is never lost. Once a new worker comes online, it picks up exactly where the last one left off."
+      }
+    ],
+    technical: [
+      "Distributed partition management for high throughput",
+      "Durable message persistence for fault tolerance",
+      "Asynchronous producing/consuming with AIOKafka",
+      "Zookeeper orchestration for cluster health",
+      "Consumer Groups for parallel task distribution"
+    ],
+    stack: ["Apache Kafka", "Zookeeper", "AIOKafka", "Python"],
+    insight: "Kafka allows us to 'buffer' thousands of repository scan requests, ensuring every single one is eventually processed even if our worker fleet is momentarily overloaded."
+  },
+  "worker-fleet": {
+    title: "Worker Fleet",
+    subtitle: "The engine room of repository analysis.",
+    image: "/images/worker-fleet.png",
+    sections: [
+      {
+        heading: "Parallel Processing",
+        body: "Our worker fleet consists of containerized Python instances that listen for Kafka events. Each worker is isolated, cloning a repository into a temporary volume, analyzing the code, and streaming results back."
+      },
+      {
+        heading: "Dynamic Scaling",
+        body: "Using KEDA, the fleet size adjusts in real-time based on the length of the Kafka queue. If 100 repos are submitted, the fleet grows to 50 workers; if zero, it scales down to save costs."
+      }
+    ],
+    technical: [
+      "Dockerized analysis environments for isolation",
+      "KEDA-driven horizontal pod autoscaling (HPA)",
+      "Temporary volume management for git cloning",
+      "Asynchronous file I/O for performance",
+      "Prometheus metrics for worker health monitoring"
+    ],
+    stack: ["Python", "Docker", "Kubernetes", "KEDA"],
+    insight: "Workers are ephemeral. They spin up, do the heavy lifting of code analysis, and shut down once the work is done. This is the peak of cloud-native efficiency."
+  },
+  "gemini-ai": {
+    title: "Gemini AI Core",
+    subtitle: "The intelligence behind the code analysis.",
+    image: "/images/gemini-ai.png",
+    sections: [
+      {
+        heading: "Deep Context Analysis",
+        body: "We leverage Gemini 2.0 Flash to perform deep-dive analysis of entire codebases. Unlike simple regex scanners, Gemini understands the context, logic flow, and potential architectural flaws."
+      },
+      {
+        heading: "Systematic Reporting",
+        body: "The AI core doesn't just find bugs; it generates structured architectural reports, suggests refactoring paths, and identifies security vulnerabilities in real-time."
+      }
+    ],
+    technical: [
+      "Gemini 2.0 Flash for high-speed, long-context reasoning",
+      "System prompting for consistent architectural auditing",
+      "JSON-mode output for structured data integration",
+      "Prompt caching to reduce latency and API costs",
+      "Multi-file context injection for deep dependency tracking"
+    ],
+    stack: ["Gemini 2.0", "Google AI SDK", "Prompt Engineering"],
+    insight: "By using Gemini 2.0 Flash, we can analyze 100k+ lines of code in seconds, providing a level of architectural insight that was previously only possible via human manual review."
   }
 };
 

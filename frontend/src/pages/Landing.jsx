@@ -4,6 +4,7 @@ import { AuthButton } from '../components/ui/AuthButton';
 import { TextHoverEffect } from '../components/ui/TextHoverEffect';
 import { BackgroundRippleEffect } from '../components/ui/BackgroundRippleEffect';
 import Navbar from '../components/Navbar';
+import ArchitectureSection from '../components/ArchitectureSection';
 import FeaturesSection from '../components/FeaturesSection';
 
 const Meteor = ({ index }) => {
@@ -22,10 +23,10 @@ const Landing = ({ onAuthenticate }) => {
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
       
-      {/* Floating Navigation - highest z so it's always clickable */}
+      {/* Floating Navigation */}
       <Navbar onConnect={onAuthenticate} />
 
-      {/* Background Ripple Effect - covers ENTIRE page, lowest interactive layer */}
+      {/* Background Ripple Effect - lowest layer */}
       <div className="fixed inset-0 z-[1]">
         <BackgroundRippleEffect />
       </div>
@@ -35,7 +36,7 @@ const Landing = ({ onAuthenticate }) => {
         {meteors.map((_, i) => <Meteor key={i} index={i} />)}
       </div>
 
-      {/* Content Layer - pointer-events-none so clicks pass through to ripple */}
+      {/* Hero Content Layer */}
       <div className="relative z-[5] text-center pt-10 flex flex-col items-center pointer-events-none">
         
         {/* Giant Interactive Brand Name */}
@@ -48,15 +49,18 @@ const Landing = ({ onAuthenticate }) => {
         </div>
       </div>
 
-      {/* Features Grid - pointer-events-none on wrapper, auto on cards */}
+      {/* Features Grid */}
       <div className="relative z-[5] pointer-events-none">
         <div className="pointer-events-auto">
           <FeaturesSection />
         </div>
       </div>
+
+      {/* Architecture Topology - NOW AFTER FEATURES */}
+      <ArchitectureSection />
+      
     </div>
   );
 };
 
 export default Landing;
-
