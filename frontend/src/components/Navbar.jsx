@@ -5,6 +5,8 @@ import { FiGithub, FiStar } from 'react-icons/fi';
 import { cn } from '../utils/cn';
 import { NoiseBackground } from './ui/NoiseBackground';
 
+import GooeyNav from './ui/GooeyNav';
+
 const Navbar = ({ onConnect }) => {
   const [stars, setStars] = useState(null);
   const [activeSection, setActiveSection] = useState('home');
@@ -65,17 +67,22 @@ const Navbar = ({ onConnect }) => {
   };
 
   const navItems = [
-    { name: 'Features', id: 'features', href: '/#features' },
-    { name: 'Architecture', id: 'architecture', href: '/#architecture' },
-    { name: 'Docs', id: 'docs', href: '/#docs' },
-    { name: 'Contact', id: 'contact', href: '/#contact' }
+    { label: 'Features', id: 'features', href: '#features' },
+    { label: 'Architecture', id: 'architecture', href: '#architecture' },
+    { label: 'Docs', id: 'docs', href: '#docs' },
+    { label: 'Contact', id: 'contact', href: '#contact' }
   ];
 
-  const handleNavClick = (e, item) => {
-    if (activeSection === item.id) {
-      e.preventDefault();
+  const activeIndex = navItems.findIndex(item => item.id === activeSection);
+
+  const handleNavClick = (item) => {
+    if (activeSection === item.id && !isDocsPage) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setActiveSection('home');
+    }
+    // If we are on a different page (like docs), handle the redirect
+    if (isDocsPage) {
+        window.location.href = `/${item.href}`;
     }
   };
 
@@ -91,7 +98,7 @@ const Navbar = ({ onConnect }) => {
         gradientColors={["#6366f1", "#a855f7", "#6366f1"]}
       >
         <div className={cn(
-          "relative rounded-full bg-zinc-950/90 backdrop-blur-xl px-1 py-1.5",
+          "relative rounded-full bg-zinc-950/90 backdrop-blur-xl px-1 py-1",
           "flex items-center min-w-fit transition-all duration-500",
           isDocsPage ? "px-4" : "sm:px-2"
         )}>
@@ -104,33 +111,13 @@ const Navbar = ({ onConnect }) => {
             </Link>
           ) : (
             /* Landing Page Navbar - Full */
-            <div className="flex items-center gap-2 sm:gap-6">
-              <div className="flex items-center gap-1 sm:gap-4 pl-4 sm:pl-6">
-                {navItems.map((item) => {
-                  const isActive = activeSection === item.id;
-                  return (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      onClick={(e) => handleNavClick(e, item)}
-                      className={cn(
-                        "relative px-3 py-1.5 text-[13px] font-medium transition-all duration-300 rounded-full",
-                        isActive 
-                          ? "text-white bg-indigo-500/10 shadow-[inset_0_0_10px_rgba(99,102,241,0.2)]" 
-                          : "text-zinc-400 hover:text-white hover:bg-white/5"
-                      )}
-                    >
-                      {item.name}
-                      {isActive && (
-                        <motion.div 
-                          layoutId="active-pill"
-                          className="absolute inset-0 border border-indigo-500/20 rounded-full"
-                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                        />
-                      )}
-                    </a>
-                  );
-                })}
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="flex items-center pl-2">
+                <GooeyNav 
+                    items={navItems} 
+                    activeIndex={activeIndex === -1 ? undefined : activeIndex}
+                    onItemClick={handleNavClick}
+                />
               </div>
 
               <div className="h-4 w-px bg-zinc-800 mx-1 sm:mx-2" />
