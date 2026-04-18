@@ -53,7 +53,7 @@ const Sidebar = ({ view, setView, isOpen }) => {
       <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
-          const isActive = view === item.id;
+          const isActive = view === item.id || (view === 'overview' && item.id === 'dashboard');
           return (
             <button
               key={item.id}
@@ -65,7 +65,7 @@ const Sidebar = ({ view, setView, isOpen }) => {
                 padding: '10px 12px',
                 borderRadius: '8px',
                 border: 'none',
-                background: isActive ? 'var(--zinc-900)' : 'transparent',
+                background: isActive ? 'var(--zinc-800)' : 'transparent',
                 color: isActive ? 'white' : 'var(--zinc-400)',
                 cursor: 'pointer',
                 textAlign: 'left',
