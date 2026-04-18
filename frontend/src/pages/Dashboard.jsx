@@ -5,7 +5,7 @@ import Sidebar from '../components/Sidebar';
 import StatCard from '../components/StatCard';
 
 const Dashboard = () => {
-  const [view, setView] = useState('overview');
+  const [view, setView] = useState('dashboard');
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -61,7 +61,7 @@ const Dashboard = () => {
   };
 
   const renderContent = () => {
-    if (view === 'overview') {
+    if (view === 'dashboard') {
       return (
         <>
           {/* Stats Grid */}
@@ -146,10 +146,10 @@ const Dashboard = () => {
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px' }}>
           <div>
             <h1 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'white', marginBottom: '8px' }}>
-                {view === 'overview' ? 'Management Console' : view.charAt(0).toUpperCase() + view.slice(1)}
+                {view === 'dashboard' ? 'Management Console' : view.charAt(0).toUpperCase() + view.slice(1)}
             </h1>
             <p style={{ color: 'var(--zinc-400)', fontSize: '0.95rem' }}>
-                {view === 'overview' ? 'Real-time repository analysis and system observability.' : `System-wide ${view} monitoring and reporting.`}
+                {view === 'dashboard' ? 'Real-time repository analysis and system observability.' : `System-wide ${view} monitoring and reporting.`}
             </p>
           </div>
           <button 
@@ -208,10 +208,5 @@ const Dashboard = () => {
       </main>
     </div>
   );
-};
-      </main>
-    </div>
-  );
-};
 
 export default Dashboard;

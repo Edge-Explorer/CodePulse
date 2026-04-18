@@ -53,7 +53,7 @@ const Sidebar = ({ view, setView, isOpen }) => {
       <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
-          const isActive = view === item.id || (view === 'overview' && item.id === 'dashboard');
+          const isActive = view === item.id;
           return (
             <button
               key={item.id}
