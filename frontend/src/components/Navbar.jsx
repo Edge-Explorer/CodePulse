@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useLocation, Link } from 'react-router-dom';
-import { FiGithub, FiStar } from 'react-icons/fi';
+import { FiGithub, FiZap } from 'react-icons/fi';
 import { cn } from '../utils/cn';
 import { NoiseBackground } from './ui/NoiseBackground';
 
