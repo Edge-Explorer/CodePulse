@@ -118,7 +118,7 @@
   position: absolute;
   inset: -20px;
   z-index: -2;
-  background: transparent;
+  background: black; /* REQUIRED for gooey filter to work */
 }
 
 .gooey-nav-container .effect.filter::after {

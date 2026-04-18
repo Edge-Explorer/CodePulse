@@ -76,10 +76,17 @@ const Navbar = ({ onConnect }) => {
   const activeIndex = navItems.findIndex(item => item.id === activeSection);
 
   const handleNavClick = (item) => {
-    if (activeSection === item.id && !isDocsPage) {
+    // Scroll to section
+    const element = document.getElementById(item.id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    if (activeSection === item.id && !isDocsPage && !element) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setActiveSection('home');
     }
+    
     // If we are on a different page (like docs), handle the redirect
     if (isDocsPage) {
         window.location.href = `/${item.href}`;
