@@ -93,10 +93,17 @@ const Sidebar = ({ view, setView, isOpen }) => {
           <FiSettings size={18} />
           {isOpen && <span>Settings</span>}
         </button>
-        <button style={{ 
+        <button 
+          onClick={() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+          }}
+          style={{ 
             display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', border: 'none', 
             background: 'transparent', color: 'var(--error-red)', cursor: 'pointer', fontSize: '13px', fontWeight: 500, opacity: 0.8
-        }}>
+          }}
+        >
           <FiLogOut size={18} />
           {isOpen && <span>Sign Out</span>}
         </button>
