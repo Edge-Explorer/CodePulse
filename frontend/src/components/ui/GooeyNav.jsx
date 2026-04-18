@@ -164,7 +164,6 @@ const GooeyNav = ({
               <a 
                 href={item.href} 
                 onClick={e => {
-                    if (item.href.startsWith('#')) e.preventDefault();
                     handleClick(e, index);
                 }} 
                 onKeyDown={e => handleKeyDown(e, index)}

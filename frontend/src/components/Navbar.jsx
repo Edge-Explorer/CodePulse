@@ -76,13 +76,7 @@ const Navbar = ({ onConnect }) => {
   const activeIndex = navItems.findIndex(item => item.id === activeSection);
 
   const handleNavClick = (item) => {
-    // Scroll to section
-    const element = document.getElementById(item.id);
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    if (activeSection === item.id && !isDocsPage && !element) {
+    if (activeSection === item.id && !isDocsPage) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setActiveSection('home');
     }

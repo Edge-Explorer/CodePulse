@@ -80,7 +80,7 @@
 }
 
 .gooey-nav-container nav ul li.active {
-  color: black;
+  color: white; /* Changed from black to ensure visibility */
 }
 
 .gooey-nav-container .effect {
@@ -105,12 +105,12 @@
 }
 
 .gooey-nav-container .effect.text.active {
-  color: black;
+  color: white; /* Ensure text stays white even when active */
 }
 
 .gooey-nav-container .effect.filter {
-  filter: blur(4px) contrast(15) blur(0);
-  mix-blend-mode: lighten;
+  filter: blur(4px) contrast(20) blur(0);
+  mix-blend-mode: screen; /* Changed from lighten for better dark mode support */
 }
 
 .gooey-nav-container .effect.filter::before {
