@@ -119,31 +119,6 @@ const DocsOverviewSection = () => {
             </motion.p>
           </div>
           
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="hidden md:block pointer-events-auto"
-          >
-            <NoiseBackground
-              containerClassName="w-fit p-1 rounded-full"
-              gradientColors={["rgb(99, 102, 241)", "rgb(168, 85, 247)"]}
-            >
-              <Link 
-                to="/docs/high-availability"
-                className={cn(
-                  "group flex items-center gap-2 px-6 py-2.5 rounded-full text-[13px] font-bold transition-all duration-100 active:scale-95",
-                  "bg-gradient-to-r from-neutral-100 via-neutral-100 to-white text-black shadow-[0px_1px_0px_0px_var(--color-neutral-50)_inset,0px_0.5px_1px_0px_var(--color-neutral-400)]",
-                  "dark:from-black dark:via-black dark:to-neutral-900 dark:text-white dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)]"
-                )}
-              >
-                Start Reading
-                <span className="opacity-50 group-hover:translate-x-1 group-hover:opacity-100 transition-all">
-                  &rarr;
-                </span>
-              </Link>
-            </NoiseBackground>
-          </motion.div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pointer-events-auto">
