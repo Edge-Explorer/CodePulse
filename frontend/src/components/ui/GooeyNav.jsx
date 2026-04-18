@@ -142,6 +142,7 @@ const GooeyNav = ({
     if (activeLi) {
       updateEffectPosition(activeLi);
       textRef.current?.classList.add('active');
+      filterRef.current?.classList.add('active'); // Added this to trigger the pill animation on mount
     }
 
     const resizeObserver = new ResizeObserver(() => {
