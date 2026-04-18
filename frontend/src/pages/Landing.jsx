@@ -50,7 +50,7 @@ const Landing = ({ onAuthenticate, isAuthenticated }) => {
         <div className="pointer-events-auto">
           <AuthButton 
             onClick={onAuthenticate} 
-            text={isAuthenticated ? "Open Dashboard" : "Continue with GitHub"}
+            text="Continue with GitHub"
             className="-mt-12" 
           />
         </div>

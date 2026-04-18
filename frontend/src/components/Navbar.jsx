@@ -141,12 +141,6 @@ const Navbar = ({ onConnect }) => {
                      <img src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.username}`} className="w-5 h-5 rounded-full border border-white/20" alt="avatar" />
                      <span>{user.username}</span>
                    </div>
-                   <button 
-                    onClick={handleLogout}
-                    className="text-zinc-500 hover:text-red-400 text-[10px] font-bold uppercase tracking-wider px-2 transition-colors"
-                   >
-                     Logout
-                   </button>
                 </div>
               ) : (
                 <button
