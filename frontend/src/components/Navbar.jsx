@@ -137,13 +137,10 @@ const Navbar = ({ onConnect }) => {
 
               {user ? (
                 <div className="flex items-center gap-3 pr-2">
-                   <Link 
-                    to="/dashboard"
-                    className="flex items-center gap-2 pl-2 pr-4 py-1.5 rounded-full bg-indigo-500 text-white text-[11px] font-bold hover:bg-indigo-600 transition-all"
-                   >
+                   <div className="flex items-center gap-2 pl-2 pr-4 py-1.5 rounded-full bg-zinc-900 border border-white/5 text-zinc-400 text-[11px] font-bold">
                      <img src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.username}`} className="w-5 h-5 rounded-full border border-white/20" alt="avatar" />
-                     <span>Dashboard</span>
-                   </Link>
+                     <span>{user.username}</span>
+                   </div>
                    <button 
                     onClick={handleLogout}
                     className="text-zinc-500 hover:text-red-400 text-[10px] font-bold uppercase tracking-wider px-2 transition-colors"

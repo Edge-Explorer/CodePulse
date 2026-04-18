@@ -20,7 +20,7 @@ const Meteor = ({ index }) => {
   return <div key={index} className="meteor-effect" style={style} />;
 };
 
-const Landing = ({ onAuthenticate }) => {
+const Landing = ({ onAuthenticate, isAuthenticated }) => {
   const meteors = Array.from({ length: 20 });
 
   return (
@@ -48,7 +48,11 @@ const Landing = ({ onAuthenticate }) => {
         </div>
 
         <div className="pointer-events-auto">
-          <AuthButton onClick={onAuthenticate} className="-mt-12" />
+          <AuthButton 
+            onClick={onAuthenticate} 
+            text={isAuthenticated ? "Open Dashboard" : "Continue with GitHub"}
+            className="-mt-12" 
+          />
         </div>
       </div>
 

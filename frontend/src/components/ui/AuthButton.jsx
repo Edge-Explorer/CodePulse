@@ -3,7 +3,7 @@ import { FiGithub } from "react-icons/fi";
 import { NoiseBackground } from "./NoiseBackground";
 import { cn } from "../../utils/cn";
 
-export const AuthButton = ({ onClick, className }) => {
+export const AuthButton = ({ onClick, className, text = "Continue with GitHub" }) => {
   return (
     <div className={cn("flex justify-center items-center w-full", className)}>
       <NoiseBackground
@@ -26,7 +26,7 @@ export const AuthButton = ({ onClick, className }) => {
           )}
         >
           <FiGithub size={22} className="text-white opacity-80 group-hover:opacity-100 transition-opacity" />
-          <span className="font-extrabold tracking-tight text-xl uppercase italic">Continue with GitHub</span>
+          <span className="font-extrabold tracking-tight text-xl uppercase italic">{text}</span>
           <span className="ml-1 text-indigo-400 group-hover:translate-x-1 group-hover:opacity-100 transition-all font-bold text-2xl">
             &rarr;
           </span>
