@@ -80,7 +80,7 @@
 }
 
 .gooey-nav-container nav ul li.active {
-  color: white; /* Changed from black to ensure visibility */
+  color: black; /* Reverted to black now that the white pill is visible */
 }
 
 .gooey-nav-container .effect {
@@ -105,7 +105,7 @@
 }
 
 .gooey-nav-container .effect.text.active {
-  color: white; /* Ensure text stays white even when active */
+  color: black; /* Text should be black when the white pill is behind it */
 }
 
 .gooey-nav-container .effect.filter {
