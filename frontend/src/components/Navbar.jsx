@@ -98,16 +98,8 @@ const Navbar = ({ onConnect }) => {
         containerClassName="rounded-full p-[1px] shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
         gradientColors={["#6366f1", "#a855f7", "#6366f1"]}
       >
-        <div className="relative rounded-full bg-zinc-950/90 backdrop-blur-xl px-2 py-1 flex items-center gap-4">
+        <div className="relative rounded-full bg-zinc-950/90 backdrop-blur-xl px-4 py-1 flex items-center gap-4">
           
-          {/* Logo Section */}
-          <div className="flex items-center gap-2 pl-3">
-            <FiZap size={16} className="text-indigo-400" style={{ filter: 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.5))' }} />
-            <span className="text-[11px] font-black tracking-widest text-white uppercase">CODEPULSE</span>
-          </div>
-
-          <div className="h-4 w-[1px] bg-white/10" />
-
           {/* Navigation Items */}
           <GooeyNav 
             items={navItems} 
