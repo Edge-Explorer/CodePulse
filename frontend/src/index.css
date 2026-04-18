@@ -3,12 +3,33 @@
 @tailwind utilities;
 
 :root {
-  --bg-dark: #000000;
-  --bg-card: rgba(255, 255, 255, 0.01);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --accent-primary: #6366f1;
-  --text-main: #ffffff;
-  --text-dim: #94a3b8;
+  /* Professional Dark Palette */
+  --pitch-black: #000000;
+  --zinc-950: #09090b;
+  --zinc-900: #18181b;
+  --zinc-800: #27272a;
+  --zinc-700: #3f3f46;
+  --zinc-400: #a1a1aa;
+  --zinc-500: #71717a;
+  
+  --accent-indigo: #6366f1;
+  --accent-purple: #a855f7;
+  --error-red: #ef4444;
+  --success-green: #22c55e;
+  
+  /* Backgrounds */
+  --bg-main: var(--pitch-black);
+  --bg-sidebar: var(--zinc-950);
+  --bg-card: var(--zinc-900);
+  
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-strong: rgba(255, 255, 255, 0.08);
+  
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: var(--zinc-400);
+  --text-muted: var(--zinc-500);
 }
 
 @keyframes cell-ripple {
@@ -26,11 +47,24 @@
 }
 
 body {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
   margin: 0;
   overflow-x: hidden;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Professional Utilities */
+.pro-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pro-card:hover {
+  border-color: var(--border-strong);
 }
 
 /* Custom Meteor Effect */
@@ -38,7 +72,7 @@ body {
   position: absolute;
   width: 1px;
   height: 80px;
-  background: linear-gradient(to bottom, transparent, #6366f1);
+  background: linear-gradient(to bottom, transparent, var(--accent-indigo));
   transform: rotate(215deg);
   opacity: 0.1;
   animation: meteor linear infinite;

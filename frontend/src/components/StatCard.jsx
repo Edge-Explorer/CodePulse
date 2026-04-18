@@ -1,21 +1,43 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const StatCard = ({ icon, label, value, trend, delay }) => {
+const StatCard = ({ icon, label, value, trend, delay, color }) => {
   return (
-    <motion.div 
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay }}
-      className="glass-card" 
-      style={{ padding: '24px' }}
+      className="pro-card"
+      style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-        <div className="glass-card" style={{ padding: '8px', display: 'flex', background: 'rgba(255,255,255,0.02)' }}>{icon}</div>
-        <span style={{ fontSize: '0.8rem', color: trend.includes('+') ? 'var(--success)' : 'var(--text-dim)' }}>{trend}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ 
+            width: '36px', height: '36px', 
+            borderRadius: '10px', 
+            background: 'rgba(255,255,255,0.03)', 
+            display: 'grid', placeItems: 'center',
+            color: color || 'var(--accent-indigo)'
+        }}>
+          {icon}
+        </div>
+        <span style={{ 
+            fontSize: '11px', fontWeight: 700, 
+            color: trend.startsWith('+') ? 'var(--success-green)' : 'var(--zinc-500)',
+            background: trend.startsWith('+') ? 'rgba(34, 197, 94, 0.08)' : 'transparent',
+            padding: '4px 8px', borderRadius: '4px'
+        }}>
+          {trend}
+        </span>
       </div>
-      <h3 style={{ fontSize: '0.9rem', color: 'var(--text-dim)', marginBottom: '8px', fontWeight: 400 }}>{label}</h3>
-      <p style={{ fontSize: '1.8rem', fontWeight: 600 }}>{value}</p>
+      
+      <div>
+        <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--zinc-500)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            {label}
+        </p>
+        <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>
+            {value}
+        </h3>
+      </div>
     </motion.div>
   );
 };

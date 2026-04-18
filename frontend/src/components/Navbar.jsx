@@ -95,68 +95,52 @@ const Navbar = ({ onConnect }) => {
       className="fixed top-8 inset-x-0 z-[50] flex justify-center px-4"
     >
       <NoiseBackground
-        containerClassName="rounded-full p-[1.5px] shadow-[0_0_30px_rgba(99,102,241,0.2)] hover:shadow-[0_0_50px_rgba(99,102,241,0.4)] transition-shadow duration-700"
+        containerClassName="rounded-full p-[1px] shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
         gradientColors={["#6366f1", "#a855f7", "#6366f1"]}
       >
-        <div className={cn(
-          "relative rounded-full bg-zinc-950/90 backdrop-blur-xl px-1 py-1",
-          "flex items-center min-w-fit transition-all duration-500",
-          isDocsPage ? "px-4" : "sm:px-2"
-        )}>
+        <div className="relative rounded-full bg-zinc-950/90 backdrop-blur-xl px-2 py-1 flex items-center gap-4">
           
-          {isDocsPage ? (
-            /* Docs Page Navbar - Minimalist */
-            <Link to="/" className="flex items-center gap-3 px-4 py-1.5 text-zinc-400 hover:text-white transition-all group">
-              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current group-hover:-translate-x-1 transition-transform"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-              <span className="text-sm font-bold tracking-tight">Back to System Overview</span>
-            </Link>
-          ) : (
-            /* Landing Page Navbar - Full */
-            <div className="flex items-center gap-2 sm:gap-4">
-              <div className="flex items-center pl-2">
-                <GooeyNav 
-                    items={navItems} 
-                    activeIndex={activeIndex === -1 ? undefined : activeIndex}
-                    onItemClick={handleNavClick}
+          {/* Logo Section */}
+          <div className="flex items-center gap-2 pl-3">
+            <FiZap size={16} className="text-indigo-400" style={{ filter: 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.5))' }} />
+            <span className="text-[11px] font-black tracking-widest text-white uppercase">CODEPULSE</span>
+          </div>
+
+          <div className="h-4 w-[1px] bg-white/10" />
+
+          {/* Navigation Items */}
+          <GooeyNav 
+            items={navItems} 
+            activeIndex={activeIndex === -1 ? undefined : activeIndex}
+            onItemClick={handleNavClick}
+          />
+
+          <div className="h-4 w-[1px] bg-white/10" />
+
+          {/* Auth/User Section */}
+          <div className="pr-1">
+            {user ? (
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-white/5 text-zinc-400 hover:text-white hover:border-white/10 transition-all active:scale-95"
+              >
+                <img 
+                    src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.username}`} 
+                    className="w-5 h-5 rounded-full border border-white/10" 
+                    alt="avatar" 
                 />
-              </div>
-
-              <div className="h-4 w-px bg-zinc-800 mx-1 sm:mx-2" />
-
-              {user ? (
-                <div className="flex items-center gap-3 pr-2">
-                   <div className="flex items-center gap-2 pl-2 pr-4 py-1.5 rounded-full bg-zinc-900 border border-white/5 text-zinc-400 text-[11px] font-bold">
-                     <img src={user.avatar_url || `https://ui-avatars.com/api/?name=${user.username}`} className="w-5 h-5 rounded-full border border-white/20" alt="avatar" />
-                     <span>{user.username}</span>
-                   </div>
-                </div>
-              ) : (
-                <button
-                  onClick={handleLogin}
-                  className={cn(
-                    "group relative flex items-center gap-2.5 px-5 py-2 rounded-full",
-                    "bg-white text-black text-[12px] font-bold transition-all duration-300",
-                    "hover:bg-zinc-200 active:scale-[0.96]"
-                  )}
-                >
-                  <div className="flex items-center gap-2">
-                    <FiGithub className="w-4 h-4" />
-                    <span>Connect GitHub</span>
-                  </div>
-                  {stars !== null && (
-                    <>
-                      <div className="h-3 w-[1px] bg-black/20 mx-0.5" />
-                      <div className="flex items-center gap-1">
-                        <FiStar className="w-3.5 h-3.5 fill-black" />
-                        <span>{stars}</span>
-                      </div>
-                    </>
-                  )}
-                  <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 blur-md transition-opacity" />
-                </button>
-              )}
-            </div>
-          )}
+                <span className="text-[11px] font-bold tracking-tight">{user.username}</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="flex items-center gap-2 px-5 py-1.5 rounded-full bg-white text-black text-[11px] font-black uppercase tracking-tight hover:bg-zinc-200 transition-all active:scale-95"
+              >
+                <FiGithub size={14} />
+                <span>Connect</span>
+              </button>
+            )}
+          </div>
         </div>
       </NoiseBackground>
     </motion.div>

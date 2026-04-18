@@ -12,68 +12,92 @@ const NAV_ITEMS = [
 const Sidebar = ({ view, setView, isOpen }) => {
   return (
     <motion.aside
-      initial={{ x: -100 }}
-      animate={{ x: 0 }}
-      className="glass-card"
+      initial={{ x: -20, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
       style={{
         width: isOpen ? '260px' : '80px',
-        margin: '20px',
-        marginRight: '0',
+        background: 'var(--bg-sidebar)',
+        borderRight: '1px solid var(--border-subtle)',
         display: 'flex',
         flexDirection: 'column',
-        padding: '24px 16px',
-        height: 'calc(100vh - 40px)',
+        padding: '32px 16px',
+        height: '100vh',
         flexShrink: 0,
+        zIndex: 100,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '48px', padding: '0 8px' }}>
-        <FiZap size={22} className="neon-text" />
+      {/* Brand Logo */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '48px', padding: '0 12px' }}>
+        <div style={{ 
+            width: '32px', h: '32px', 
+            background: 'var(--accent-indigo)', 
+            borderRadius: '8px', 
+            display: 'grid', 
+            placeItems: 'center',
+            boxShadow: '0 0 20px rgba(99, 102, 241, 0.3)'
+        }}>
+            <FiZap size={18} color="white" />
+        </div>
         {isOpen && (
-          <h2 className="neon-text" style={{ fontSize: '1.2rem', letterSpacing: '1px' }}>
+          <h2 style={{ 
+            fontSize: '1rem', 
+            fontWeight: 800, 
+            letterSpacing: '-0.02em', 
+            color: 'white' 
+          }}>
             CODEPULSE
           </h2>
         )}
       </div>
 
-      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = view === item.id;
           return (
-            <motion.button
+            <button
               key={item.id}
-              whileHover={{ x: 4 }}
-              whileTap={{ scale: 0.98 }}
               onClick={() => setView(item.id)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                padding: '12px',
-                borderRadius: '12px',
+                padding: '10px 12px',
+                borderRadius: '8px',
                 border: 'none',
-                background: isActive ? 'rgba(99, 102, 241, 0.1)' : 'transparent',
-                color: isActive ? 'var(--accent-primary)' : 'var(--text-dim)',
+                background: isActive ? 'var(--zinc-900)' : 'transparent',
+                color: isActive ? 'white' : 'var(--zinc-400)',
                 cursor: 'pointer',
                 textAlign: 'left',
                 width: '100%',
-                fontWeight: isActive ? 600 : 400,
+                fontSize: '13px',
+                fontWeight: isActive ? 600 : 500,
+                transition: 'all 0.2s ease',
               }}
+              onMouseOver={(e) => { if(!isActive) e.currentTarget.style.color = 'white'; }}
+              onMouseOut={(e) => { if(!isActive) e.currentTarget.style.color = 'var(--zinc-400)'; }}
             >
-              <Icon size={20} />
+              <Icon size={18} style={{ opacity: isActive ? 1 : 0.7 }} />
               {isOpen && <span>{item.label}</span>}
-            </motion.button>
+            </button>
           );
         })}
       </nav>
 
-      <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <button style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: 'none', background: 'transparent', color: 'var(--text-dim)', cursor: 'pointer' }}>
-          <FiSettings size={20} />
+      {/* Footer Actions */}
+      <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '4px', borderTop: '1px solid var(--border-subtle)', paddingTop: '24px' }}>
+        <button style={{ 
+            display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', border: 'none', 
+            background: 'transparent', color: 'var(--zinc-400)', cursor: 'pointer', fontSize: '13px', fontWeight: 500 
+        }}>
+          <FiSettings size={18} />
           {isOpen && <span>Settings</span>}
         </button>
-        <button style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: 'none', background: 'transparent', color: 'var(--error)', cursor: 'pointer' }}>
-          <FiLogOut size={20} />
+        <button style={{ 
+            display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', border: 'none', 
+            background: 'transparent', color: 'var(--error-red)', cursor: 'pointer', fontSize: '13px', fontWeight: 500, opacity: 0.8
+        }}>
+          <FiLogOut size={18} />
           {isOpen && <span>Sign Out</span>}
         </button>
       </div>
