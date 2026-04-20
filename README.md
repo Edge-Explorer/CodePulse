@@ -95,7 +95,7 @@ kubectl get pods
 
 ## Planned Next Steps
 
-- Frontend dashboard using React and Vite
-- End-to-end test: submit a scan and retrieve the AI report via the API
-- Production cloud deployment to GKE or EKS
-- Additional microservice projects to deepen Kubernetes and distributed systems understanding
+- Frontend dashboard using React and Vite.
+- End-to-end test: submit a scan and retrieve the AI report via the API.
+- Production cloud deployment to GKE or EKS.
+- Additional microservice projects to deepen Kubernetes and distributed systems understanding.
