@@ -51,14 +51,26 @@ class AIScanner:
             shutil.rmtree(temp_dir, onerror= on_rm_error)
 
     def _get_code_context(self, path: str) -> str:
-        """Helper to read code files (.py, .js, etc.)"""
+        """Helper to read code files while ignoring junk directories"""
         context= ""
         exts = ('.py', '.js', '.ts', '.go', '.java', '.rs', '.ps1', '.ipynb', '.cpp', '.h', '.c', '.sh', '.yaml', '.yml', '.md', '.json')
-        for root, _, files in os.walk(path):
+        IGNORE_DIRS = {'node_modules', '.git', '.venv', 'venv', '__pycache__', 'dist', 'build', '.next', '.github'}
+        
+        for root, dirs, files in os.walk(path):
+            # Efficiently skip ignored directories
+            dirs[:] = [d for d in dirs if d not in IGNORE_DIRS]
+            
             for file in files:
                 if file.endswith(exts):
-                    with open(os.path.join(root, file), 'r', encoding= 'utf-8', errors= 'ignore') as f:
-                        context += f"\n-- {file} ---\n{f.read()}\n"
+                    file_path = os.path.join(root, file)
+                    # Skip massive files (e.g., minified JS)
+                    if os.path.getsize(file_path) > 100000: # Skip files > 100KB
+                        continue
+                        
+                    with open(file_path, 'r', encoding= 'utf-8', errors= 'ignore') as f:
+                        # Add relative path for context
+                        rel_path = os.path.relpath(file_path, path)
+                        context += f"\n-- File: {rel_path} ---\n{f.read()}\n"
         
         return context
 
