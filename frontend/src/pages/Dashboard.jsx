@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiZap, FiShield, FiSearch, FiChevronRight, FiPlus, FiLoader, FiArrowLeft } from 'react-icons/fi';
+import { FiZap, FiShield, FiSearch, FiChevronRight, FiPlus, FiLoader, FiArrowLeft, FiCode } from 'react-icons/fi';
 import Sidebar from '../components/Sidebar';
 import StatCard from '../components/StatCard';
 
@@ -137,25 +137,73 @@ const Dashboard = () => {
                 ) : (
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '24px', alignItems: 'start' }}>
                         {/* Main Analysis Column */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                            <div className="pro-card" style={{ padding: '32px' }}>
-                                <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>AI Intelligence Report</h3>
-                                <div style={{ color: 'var(--zinc-300)', fontSize: '14px', lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
-                                    {aiData?.explanation || aiData?.analysis || aiData?.summary || (typeof aiData === 'string' ? aiData : JSON.stringify(aiData, null, 2)) || "Analyzing architectural patterns..."}
-                                </div>
-                            </div>
-                            
-                            {aiData?.issues && aiData.issues.length > 0 && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                            {/* Executive Summary / Explanation */}
+                            {(aiData?.explanation || aiData?.analysis || aiData?.summary) && (
                                 <div className="pro-card" style={{ padding: '32px' }}>
-                                    <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>Detected Issues</h3>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                        {aiData.issues.map((issue, i) => (
-                                            <div key={i} style={{ padding: '16px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', borderLeft: '3px solid var(--error-red)' }}>
-                                                <div style={{ color: 'white', fontWeight: 700, fontSize: '13px', marginBottom: '4px' }}>{issue.title || issue.type}</div>
-                                                <div style={{ color: 'var(--zinc-400)', fontSize: '12px' }}>{issue.description}</div>
-                                            </div>
-                                        ))}
+                                    <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '24px' }}>Architectural Analysis</h3>
+                                    <div style={{ color: 'var(--zinc-300)', fontSize: '15px', lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
+                                        {aiData.explanation || aiData.analysis || aiData.summary}
                                     </div>
+                                </div>
+                            )}
+                            
+                            {/* Security & Technical Issues */}
+                            {(aiData?.security || aiData?.issues) && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                    <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', paddingLeft: '8px' }}>
+                                        Technical Findings
+                                    </h3>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
+                                        {(aiData.security || aiData.issues).map((issue, i) => {
+                                            const severity = issue.severity?.toLowerCase() || 'medium';
+                                            const sevColor = severity === 'high' ? '#ef4444' : severity === 'medium' ? '#f59e0b' : '#3b82f6';
+                                            
+                                            return (
+                                                <motion.div 
+                                                    key={i}
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: i * 0.05 }}
+                                                    className="pro-card" 
+                                                    style={{ padding: '24px', borderLeft: `4px solid ${sevColor}`, background: 'rgba(255,255,255,0.01)' }}
+                                                >
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                                                        <h4 style={{ color: 'white', fontWeight: 700, fontSize: '15px' }}>{issue.title}</h4>
+                                                        <span style={{ fontSize: '10px', fontWeight: 800, padding: '4px 8px', borderRadius: '4px', background: `${sevColor}20`, color: sevColor, textTransform: 'uppercase' }}>
+                                                            {severity}
+                                                        </span>
+                                                    </div>
+                                                    <p style={{ color: 'var(--zinc-400)', fontSize: '13px', lineHeight: '1.6', marginBottom: '16px' }}>
+                                                        {issue.description}
+                                                    </p>
+                                                    {(issue.file || issue.line) && (
+                                                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--zinc-500)', fontSize: '11px', fontFamily: 'monospace', background: 'var(--zinc-900)', padding: '4px 8px', borderRadius: '4px' }}>
+                                                                <FiCode size={12} />
+                                                                {issue.file || 'Unknown File'}
+                                                            </div>
+                                                            {issue.line && (
+                                                                <div style={{ color: 'var(--zinc-600)', fontSize: '11px', fontWeight: 600 }}>
+                                                                    Line {issue.line}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </motion.div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Fallback for raw content if no structured keys found */}
+                            {!aiData?.explanation && !aiData?.analysis && !aiData?.summary && !aiData?.security && !aiData?.issues && (
+                                <div className="pro-card" style={{ padding: '32px' }}>
+                                    <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', marginBottom: '20px' }}>Raw Analysis Report</h3>
+                                    <pre style={{ color: 'var(--zinc-300)', fontSize: '13px', lineHeight: '1.6', whiteSpace: 'pre-wrap', fontFamily: 'Inter, sans-serif' }}>
+                                        {typeof aiData === 'string' ? aiData : JSON.stringify(aiData, null, 2)}
+                                    </pre>
                                 </div>
                             )}
                         </div>
