@@ -28,8 +28,12 @@ class AIScanner:
 
             # The Prompt: Tells Gemini exactly how to act
             prompt = f"""
-            Analyse this repository code for Security Bugs and Architecture quality. 
-            Return the results in a professional JSON format.
+            Act as a Senior Security Engineer and System Architect.
+            Analyse this repository code for Security Vulnerabilities, Performance Bottlenecks, and Architecture quality. 
+            
+            IMPORTANT: Return the results ONLY in a valid JSON format with the following keys:
+            1. "explanation": A detailed multi-paragraph technical breakdown of the code quality and architecture.
+            2. "issues": A list of objects, each containing "title" and "description" for specific bugs or security flaws.
             
             Code Context:
             {code_context[:30000]}

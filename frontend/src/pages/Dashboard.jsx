@@ -139,9 +139,9 @@ const Dashboard = () => {
                         {/* Main Analysis Column */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                             <div className="pro-card" style={{ padding: '32px' }}>
-                                <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>AI Explanation</h3>
+                                <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>AI Intelligence Report</h3>
                                 <div style={{ color: 'var(--zinc-300)', fontSize: '14px', lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
-                                    {aiData?.explanation || "No detailed explanation available for this scan."}
+                                    {aiData?.explanation || aiData?.analysis || aiData?.summary || (typeof aiData === 'string' ? aiData : JSON.stringify(aiData, null, 2)) || "Analyzing architectural patterns..."}
                                 </div>
                             </div>
                             
