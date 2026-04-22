@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiZap, FiShield, FiSearch, FiChevronRight, FiPlus, FiLoader } from 'react-icons/fi';
+import { FiZap, FiShield, FiSearch, FiChevronRight, FiPlus, FiLoader, FiArrowLeft } from 'react-icons/fi';
 import Sidebar from '../components/Sidebar';
 import StatCard from '../components/StatCard';
 
@@ -11,6 +11,11 @@ const Dashboard = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newRepoUrl, setNewRepoUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // New State for Reports
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [reportData, setReportData] = useState(null);
+  const [reportLoading, setReportLoading] = useState(false);
 
   const fetchProjects = async () => {
     try {
@@ -30,9 +35,45 @@ const Dashboard = () => {
     }
   };
 
+  const fetchReport = async (projectId) => {
+    try {
+      setReportLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8000/projects/${projectId}/report`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setReportData(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch report:", err);
+    } finally {
+      setReportLoading(false);
+    }
+  };
+
+  const parseAIReport = (rawReport) => {
+    if (!rawReport) return null;
+    try {
+      // Handle cases where Gemini wraps JSON in markdown blocks
+      const cleanJson = rawReport.replace(/```json\n?|\n?```/g, '').trim();
+      return JSON.parse(cleanJson);
+    } catch (e) {
+      console.error("JSON Parsing failed:", e);
+      return { explanation: rawReport }; // Fallback
+    }
+  };
+
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+    setView('report');
+    fetchReport(project.id);
+  };
 
   const handleAddProject = async (e) => {
     e.preventDefault();
@@ -61,6 +102,87 @@ const Dashboard = () => {
   };
 
   const renderContent = () => {
+    if (view === 'report' && selectedProject) {
+        const aiData = reportData?.status === 'completed' ? parseAIReport(reportData.report) : null;
+        
+        return (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                {/* Report Header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
+                    <button 
+                        onClick={() => setView('dashboard')}
+                        style={{ background: 'var(--zinc-800)', border: 'none', color: 'white', padding: '8px', borderRadius: '8px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}
+                    >
+                        <FiArrowLeft size={18} />
+                    </button>
+                    <div>
+                        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'white' }}>{selectedProject.name} Analysis</h2>
+                        <p style={{ color: 'var(--zinc-500)', fontSize: '13px' }}>
+                            {reportData?.status === 'completed' ? `Last scanned on ${new Date(reportData.scanned_at).toLocaleDateString()}` : 'Retrieving AI intelligence...'}
+                        </p>
+                    </div>
+                </div>
+
+                {reportLoading ? (
+                    <div style={{ padding: '64px', textAlign: 'center' }}>
+                        <FiLoader className="animate-spin" size={32} style={{ margin: '0 auto 24px', color: 'var(--zinc-500)' }} />
+                        <p style={{ color: 'var(--zinc-400)' }}>Parsing AI analysis and architectural insights...</p>
+                    </div>
+                ) : reportData?.status === 'pending' ? (
+                    <div className="pro-card" style={{ padding: '48px', textAlign: 'center' }}>
+                        <FiZap size={48} style={{ color: 'var(--accent-indigo)', marginBottom: '24px', opacity: 0.5 }} />
+                        <h3 style={{ color: 'white', marginBottom: '8px' }}>Scan in Progress</h3>
+                        <p style={{ color: 'var(--zinc-500)', fontSize: '14px' }}>The AI engine is currently dissecting your repository. Check back in a few moments.</p>
+                    </div>
+                ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '24px', alignItems: 'start' }}>
+                        {/* Main Analysis Column */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            <div className="pro-card" style={{ padding: '32px' }}>
+                                <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>AI Explanation</h3>
+                                <div style={{ color: 'var(--zinc-300)', fontSize: '14px', lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
+                                    {aiData?.explanation || "No detailed explanation available for this scan."}
+                                </div>
+                            </div>
+                            
+                            {aiData?.issues && aiData.issues.length > 0 && (
+                                <div className="pro-card" style={{ padding: '32px' }}>
+                                    <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '20px' }}>Detected Issues</h3>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        {aiData.issues.map((issue, i) => (
+                                            <div key={i} style={{ padding: '16px', borderRadius: '8px', background: 'rgba(255,255,255,0.02)', borderLeft: '3px solid var(--error-red)' }}>
+                                                <div style={{ color: 'white', fontWeight: 700, fontSize: '13px', marginBottom: '4px' }}>{issue.title || issue.type}</div>
+                                                <div style={{ color: 'var(--zinc-400)', fontSize: '12px' }}>{issue.description}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Sidebar Column */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            <div className="pro-card" style={{ padding: '24px' }}>
+                                <h3 style={{ fontSize: '10px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', marginBottom: '16px' }}>Project Health</h3>
+                                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white', marginBottom: '4px' }}>98.5%</div>
+                                <div style={{ color: 'var(--success-green)', fontSize: '12px', fontWeight: 600 }}>Optimal Performance</div>
+                            </div>
+                            
+                            <div className="pro-card" style={{ padding: '24px' }}>
+                                <h3 style={{ fontSize: '10px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', marginBottom: '16px' }}>Technical Stack</h3>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                    <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '4px', background: 'var(--zinc-800)', color: 'white', fontWeight: 700 }}>
+                                        {selectedProject.language}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </motion.div>
+        );
+    }
+
     if (view === 'dashboard') {
       return (
         <>
@@ -100,7 +222,13 @@ const Dashboard = () => {
                       </thead>
                       <tbody>
                         {projects.map((item) => (
-                            <tr key={item.id} style={{ borderBottom: '1px solid var(--border-subtle)', transition: 'background 0.2s' }}>
+                            <tr 
+                                key={item.id} 
+                                onClick={() => handleProjectClick(item)}
+                                style={{ borderBottom: '1px solid var(--border-subtle)', transition: 'background 0.2s', cursor: 'pointer' }}
+                                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.015)'}
+                                onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
                                 <td style={{ padding: '20px 24px' }}>
                                     <div style={{ fontWeight: 600, color: 'white', fontSize: '14px' }}>{item.name}</div>
                                     <div style={{ fontSize: '11px', color: 'var(--zinc-500)', fontFamily: 'monospace' }}>{item.repo_url.replace('https://github.com/', '')}</div>
@@ -208,5 +336,6 @@ const Dashboard = () => {
       </main>
     </div>
   );
+};
 
 export default Dashboard;
