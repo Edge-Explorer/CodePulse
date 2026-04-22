@@ -35,18 +35,35 @@ async def create_project(
         
         repo_data = response.json()
 
-    # 3. Save to Database
-    new_project = Project(
-        name=repo_data["name"],
-        repo_url=project_in.repo_url,
-        github_repo_id=repo_data["id"],
-        language=repo_data.get("language"),
-        owner_id=current_user.id
+    # 3. Check if project already exists for this user (even if soft-deleted)
+    existing_result= await db.execute(
+        select(Project).where(Project.repo_url == project_in.repo_url, Project.owner_id == current_user.id)
     )
-    
-    db.add(new_project)
-    await db.commit()
-    await db.refresh(new_project)
+    existing_project= existing_result.scalar_one_or_none()
+
+    if existing_project:
+        if existing_project.is_active:
+            raise HTTPException(status_code= 400, detail= "Project already exists in your dashboard")
+        else:
+            # Re-activate the existing project
+            existing_project.is_active= True
+            existing_project.language= repo_data.get("language")
+            await db.commit()
+            await db.refresh(existing_project)
+            new_project= existing_project
+    else:
+        # Create a new record
+        new_project = Project(
+            name=repo_data["name"],
+            repo_url=project_in.repo_url,
+            github_repo_id=repo_data["id"],
+            language=repo_data.get("language"),
+            owner_id=current_user.id,
+            is_active= True
+        )
+        db.add(new_project)
+        await db.commit()
+        await db.refresh(new_project)
 
     task_data= {
         "project_id": new_project.id,
