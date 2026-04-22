@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiZap, FiShield, FiSearch, FiChevronRight, FiPlus, FiLoader, FiArrowLeft, FiCode } from 'react-icons/fi';
+import { FiZap, FiShield, FiSearch, FiChevronRight, FiPlus, FiLoader, FiArrowLeft, FiCode, FiTrash2 } from 'react-icons/fi';
 import Sidebar from '../components/Sidebar';
 import StatCard from '../components/StatCard';
 
@@ -98,6 +98,24 @@ const Dashboard = () => {
       console.error("Error adding project:", err);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteProject = async (e, projectId) => {
+    e.stopPropagation(); // Don't open the report!
+    if (!window.confirm("Are you sure you want to remove this project from your view? All historical data will be preserved for accountability.")) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:8000/projects/${projectId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        await fetchProjects();
+      }
+    } catch (err) {
+      console.error("Error deleting project:", err);
     }
   };
 
@@ -293,7 +311,17 @@ const Dashboard = () => {
                                     </span>
                                 </td>
                                 <td style={{ padding: '20px 24px', textAlign: 'right' }}>
-                                    <FiChevronRight size={18} color="var(--zinc-500)" />
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '16px' }}>
+                                        <button 
+                                            onClick={(e) => handleDeleteProject(e, item.id)}
+                                            style={{ background: 'none', border: 'none', color: 'var(--zinc-600)', cursor: 'pointer', transition: 'color 0.2s', padding: '4px' }}
+                                            onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                                            onMouseOut={(e) => e.currentTarget.style.color = 'var(--zinc-600)'}
+                                        >
+                                            <FiTrash2 size={16} />
+                                        </button>
+                                        <FiChevronRight size={18} color="var(--zinc-500)" />
+                                    </div>
                                 </td>
                             </tr>
                         ))}

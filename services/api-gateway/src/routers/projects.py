@@ -63,9 +63,9 @@ async def list_projects(
     current_user: User= Depends(get_current_user),
     db: AsyncSession= Depends(get_db)
 ):
-    # Fetch all projects belonging to the current user
+    # Fetch all projects belonging to the current user that are ACTIVE
     result= await db.execute(
-        select(Project).where(Project.owner_id == current_user.id)
+        select(Project).where(Project.owner_id == current_user.id, Project.is_active == True)
     )
     return result.scalars().all()
     
@@ -101,3 +101,22 @@ async def get_project_report(
         "report": report.report_data,
         "scanned_at": report.created_at
     }
+
+@router.delete("/{project_id}")
+async def delete_project(
+    project_id: int,
+    current_user: User= Depends(get_current_user),
+    db: AsyncSession= Depends(get_db)
+):
+    # SOFT DELETE: Only set is_active = False
+    result = await db.execute(
+        select(Project).where(Project.id == project_id, Project.owner_id == current_user.id)
+    )
+    project = result.scalar_one_or_none()
+    
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    
+    project.is_active = False
+    await db.commit()
+    return {"message": "Project removed from view. Data maintained for accountability."}
