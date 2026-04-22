@@ -31,38 +31,46 @@ async def consume():
             repo_url= task.get("repo_url")
             logging.info(f"RECEIVED TASK FOR PROJECT {project_id}: {repo_url}")
 
-            try:
-                # 2. RUN THE REAL AI SCAN!
-                report= await scanner.scan_repo(repo_url)
+            # 2. RUN THE AI SCAN WITH RETRIES
+            max_retries = 3
+            attempt = 0
+            success = False
+            
+            while attempt < max_retries and not success:
+                try:
+                    attempt += 1
+                    logging.info(f"SCAN ATTEMPT {attempt}/{max_retries} FOR PROJECT {project_id}...")
+                    
+                    report= await scanner.scan_repo(repo_url)
 
-                if "error" in report:
-                    logging.error(f"SCAN FAILED: {report['error']}")
-                    continue
+                    if "error" in report:
+                        logging.error(f"SCAN FAILED: {report['error']}")
+                        break # Don't retry if it's a code error
+                    
+                    # 3. SAVE TO DATABASE
+                    async with SessionLocal() as db:
+                        new_report= ScanReport(
+                            project_id= project_id,
+                            report_data= report["raw_report"]
+                        )
+                        db.add(new_report)
+                        await db.commit()
+                        logging.info(f"REPORT SAVED TO DB FOR PROJECT {project_id}!")
+                        success = True
                 
-                # 3. SAVE TO DATABASE
-                async with SessionLocal() as db:
-                    new_report= ScanReport(
-                        project_id= project_id,
-                        report_data= report["raw_report"]
-                    )
-                    db.add(new_report)
-                    await db.commit()
-                    logging.info(f"REPORT SAVED TO DB FOR PROJECT {project_id}!")
-            except Exception as e:
-                if "429" in str(e):
-                    logging.warning(f"RATE LIMIT HIT (429). Waiting 60s to retry project {project_id}...")
-                    await asyncio.sleep(60)
-                    try:
-                        report= await scanner.scan_repo(repo_url)
-                        async with SessionLocal() as db:
-                            new_report= ScanReport(project_id= project_id, report_data= report["raw_report"])
-                            db.add(new_report)
-                            await db.commit()
-                        logging.info(f"RETRY SUCCESSFUL FOR PROJECT {project_id}!")
-                    except Exception as retry_e:
-                        logging.error(f"RETRY FAILED: {retry_e}")
-                else:
-                    logging.error(f"CRITICAL ERROR processing project {project_id}: {e}")
+                except Exception as e:
+                    if "429" in str(e):
+                        wait_time = 60 * attempt # Wait longer each time
+                        logging.warning(f"RATE LIMIT HIT (429). Attempt {attempt} failed. Waiting {wait_time}s...")
+                        if attempt < max_retries:
+                            await asyncio.sleep(wait_time)
+                        else:
+                            logging.error(f"MAX RETRIES REACHED for project {project_id}. Skipping.")
+                    else:
+                        logging.error(f"CRITICAL ERROR processing project {project_id}: {e}")
+                        break # Don't retry other errors
+            
+            if not success:
                 continue
 
     finally:
