@@ -17,8 +17,8 @@ async def consume():
         bootstrap_servers= settings.KAFKA_BOOTSTRAP_SERVERS,
         group_id= "scan_workers",
         value_deserializer= lambda m: json.loads(m.decode('utf-8')),
-        max_poll_interval_ms= 300000,
-        session_timeout_ms= 30000
+        max_poll_interval_ms= 600000, # Wait up to 10 mins for AI to finish
+        session_timeout_ms= 60000      # Heartbeat timeout
     )
 
     await consumer.start()
