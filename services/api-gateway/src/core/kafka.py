@@ -20,5 +20,9 @@ async def stop_kafka():
 
 async def send_task(topic: str, data: dict):
     if producer:
+        print(f"DEBUG: Attempting to send message to {topic}...")
         await producer.send_and_wait(topic, data)
+        print(f"DEBUG: Message successfully sent to {topic}!")
         logging.info(f"Message sent to {topic}: {data}")
+    else:
+        print("DEBUG: ERROR - Kafka Producer is NONE! Task was NOT sent.")
