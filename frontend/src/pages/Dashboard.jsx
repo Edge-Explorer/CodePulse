@@ -127,43 +127,18 @@ const Dashboard = () => {
         return (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 {/* Report Header */}
-                <div style={{ position: 'relative', height: '200px', width: '100%', marginBottom: '32px', overflow: 'hidden', borderRadius: '16px' }} className="pro-card">
-                    <MagicRings
-                        color="#A855F7"
-                        colorTwo="#6366F1"
-                        ringCount={6}
-                        speed={1}
-                        attenuation={10}
-                        lineThickness={2}
-                        baseRadius={0.35}
-                        radiusStep={0.1}
-                        scaleRate={0.1}
-                        opacity={0.4}
-                        blur={0}
-                        noiseAmount={0.1}
-                        rotation={0}
-                        ringGap={1.5}
-                        fadeIn={0.7}
-                        fadeOut={0.5}
-                        followMouse={true}
-                        mouseInfluence={0.2}
-                        hoverScale={1.2}
-                        parallax={0.05}
-                        clickBurst={true}
-                    />
-                    <div style={{ position: 'relative', zIndex: 1, padding: '48px', display: 'flex', alignItems: 'center', gap: '24px' }}>
-                        <button 
-                            onClick={() => setView('dashboard')}
-                            style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', padding: '12px', borderRadius: '12px', cursor: 'pointer', display: 'grid', placeItems: 'center', backdropFilter: 'blur(8px)' }}
-                        >
-                            <FiArrowLeft size={20} />
-                        </button>
-                        <div>
-                            <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>{selectedProject.name} Analysis</h2>
-                            <p style={{ color: 'var(--zinc-400)', fontSize: '14px', fontWeight: 500 }}>
-                                {reportData?.status === 'completed' ? `Last scanned on ${new Date(reportData.scanned_at).toLocaleDateString()}` : 'Retrieving AI intelligence...'}
-                            </p>
-                        </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '32px' }}>
+                    <button 
+                        onClick={() => setView('dashboard')}
+                        style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', padding: '12px', borderRadius: '12px', cursor: 'pointer', display: 'grid', placeItems: 'center', backdropFilter: 'blur(8px)' }}
+                    >
+                        <FiArrowLeft size={20} />
+                    </button>
+                    <div>
+                        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>{selectedProject.name} Analysis</h2>
+                        <p style={{ color: 'var(--zinc-400)', fontSize: '14px', fontWeight: 500 }}>
+                            {reportData?.status === 'completed' ? `Last scanned on ${new Date(reportData.scanned_at).toLocaleDateString()}` : 'Retrieving AI intelligence...'}
+                        </p>
                     </div>
                 </div>
 
@@ -362,10 +337,37 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-main)' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-main)', position: 'relative', overflow: 'hidden' }}>
+      {/* Global Background Effect */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.25 }}>
+        <MagicRings
+            color="#A855F7"
+            colorTwo="#6366F1"
+            ringCount={8}
+            speed={0.5}
+            attenuation={8}
+            lineThickness={1.5}
+            baseRadius={0.4}
+            radiusStep={0.12}
+            scaleRate={0.15}
+            opacity={1}
+            blur={0}
+            noiseAmount={0.05}
+            rotation={0}
+            ringGap={2.0}
+            fadeIn={0.8}
+            fadeOut={0.6}
+            followMouse={true}
+            mouseInfluence={0.1}
+            hoverScale={1.1}
+            parallax={0.03}
+            clickBurst={true}
+        />
+      </div>
+
       <Sidebar view={view} setView={setView} isOpen={true} />
 
-      <main style={{ flex: 1, padding: '48px', overflowY: 'auto' }}>
+      <main style={{ flex: 1, padding: '48px', overflowY: 'auto', position: 'relative', zIndex: 1 }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '48px' }}>
           <div>
             <h1 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'white', marginBottom: '8px' }}>
