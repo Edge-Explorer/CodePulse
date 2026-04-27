@@ -23,6 +23,20 @@
   --border-strong: rgba(255, 255, 255, 0.08);
 }
 
+@keyframes cell-ripple {
+  0% { background-color: transparent; }
+  40% { background-color: rgba(255, 255, 255, 0.08); }
+  100% { background-color: transparent; }
+}
+
+.ripple-cell {
+  transition: none;
+}
+
+.ripple-active {
+  animation: cell-ripple var(--duration, 400ms) ease-out var(--delay, 0ms) 1 both;
+}
+
 body {
   background-color: var(--bg-main);
   background-image: 
