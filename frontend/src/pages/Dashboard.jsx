@@ -229,12 +229,6 @@ const Dashboard = () => {
                         {/* Sidebar Column */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                             <div className="pro-card" style={{ padding: '24px' }}>
-                                <h3 style={{ fontSize: '10px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', marginBottom: '16px' }}>Project Health</h3>
-                                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'white', marginBottom: '4px' }}>98.5%</div>
-                                <div style={{ color: 'var(--success-green)', fontSize: '12px', fontWeight: 600 }}>Optimal Performance</div>
-                            </div>
-                            
-                            <div className="pro-card" style={{ padding: '24px' }}>
                                 <h3 style={{ fontSize: '10px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', marginBottom: '16px' }}>Technical Stack</h3>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                     <span style={{ fontSize: '11px', padding: '4px 10px', borderRadius: '4px', background: 'var(--zinc-800)', color: 'white', fontWeight: 700 }}>
@@ -254,9 +248,8 @@ const Dashboard = () => {
         <>
           {/* Stats Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '48px' }}>
-            <StatCard icon={<FiShield size={18} />} label="Health Score" value={projects.length > 0 ? "98.5%" : "0%"} trend={projects.length > 0 ? "+0.5%" : "N/A"} color="var(--accent-indigo)" delay={0.1} />
-            <StatCard icon={<FiSearch size={18} />} label="Total Projects" value={projects.length.toString()} trend="Active" color="var(--accent-purple)" delay={0.2} />
-            <StatCard icon={<FiZap size={18} />} label="Active Scans" value="0" trend="Stable" color="var(--success-green)" delay={0.3} />
+            <StatCard icon={<FiSearch size={18} />} label="Total Repositories" value={projects.length.toString()} trend="Active" color="var(--accent-indigo)" delay={0.1} />
+            <StatCard icon={<FiZap size={18} />} label="System Status" value="Online" trend="Stable" color="var(--success-green)" delay={0.2} />
           </div>
 
           {/* Repositories Table */}
