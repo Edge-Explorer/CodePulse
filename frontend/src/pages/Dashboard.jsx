@@ -357,11 +357,11 @@ const Dashboard = () => {
             ringGap={2.0}
             fadeIn={0.8}
             fadeOut={0.6}
-            followMouse={true}
+            followMouse={false}
             mouseInfluence={0.1}
             hoverScale={1.1}
             parallax={0.03}
-            clickBurst={true}
+            clickBurst={false}
         />
       </div>
 
