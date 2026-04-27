@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FiArrowLeft } from 'react-icons/fi';
 import Navbar from '../components/Navbar';
 
 const DOCS_DATA = {
@@ -317,6 +318,17 @@ const DocsDetail = () => {
           initial="hidden"
           animate="visible"
         >
+          {/* Back Navigation */}
+          <motion.div variants={itemVariants} className="mb-12">
+            <Link 
+              to="/" 
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-zinc-400 hover:text-white hover:border-indigo-500/30 transition-all duration-300 group"
+            >
+              <FiArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+              <span className="text-sm font-medium">Back to Pulse</span>
+            </Link>
+          </motion.div>
+
           {/* Title Block */}
           <motion.div variants={itemVariants} className="mb-20">
             <div className="flex items-center gap-3 mb-6">
