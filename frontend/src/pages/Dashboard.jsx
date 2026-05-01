@@ -159,11 +159,37 @@ const Dashboard = () => {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                             {/* Executive Summary / Explanation */}
                             {(aiData?.explanation || aiData?.analysis || aiData?.summary) && (
-                                <div className="pro-card" style={{ padding: '32px' }}>
-                                    <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '24px' }}>Architectural Analysis</h3>
-                                    <div style={{ color: 'var(--zinc-300)', fontSize: '15px', lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
+                                <div className="pro-card" style={{ padding: '40px', position: 'relative', overflow: 'hidden' }}>
+                                    {/* Corner Crosshairs */}
+                                    <div style={{ position: 'absolute', top: '12px', left: '12px', width: '8px', height: '8px', borderLeft: '1px solid var(--zinc-500)', borderTop: '1px solid var(--zinc-500)' }} />
+                                    <div style={{ position: 'absolute', top: '12px', right: '12px', width: '8px', height: '8px', borderRight: '1px solid var(--zinc-500)', borderTop: '1px solid var(--zinc-500)' }} />
+                                    <div style={{ position: 'absolute', bottom: '12px', left: '12px', width: '8px', height: '8px', borderLeft: '1px solid var(--zinc-500)', borderBottom: '1px solid var(--zinc-500)' }} />
+                                    <div style={{ position: 'absolute', bottom: '12px', right: '12px', width: '8px', height: '8px', borderRight: '1px solid var(--zinc-500)', borderBottom: '1px solid var(--zinc-500)' }} />
+                                    
+                                    {/* Sub-Header Metadata */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+                                        <h3 style={{ fontSize: '11px', fontWeight: 800, color: 'var(--zinc-500)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Intelligence Briefing</h3>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <span style={{ fontSize: '9px', color: 'var(--zinc-600)', fontFamily: 'monospace' }}>REPORT_ID: {selectedProject.id.toString(16).toUpperCase()}</span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--accent-indigo)15', border: '1px solid var(--accent-indigo)30', padding: '4px 10px', borderRadius: '4px' }}>
+                                                <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--accent-indigo)', boxShadow: '0 0 8px var(--accent-indigo)' }} />
+                                                <span style={{ fontSize: '9px', fontWeight: 800, color: 'var(--accent-indigo)', textTransform: 'uppercase' }}>Verified by Gemini 2.5</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Main Content */}
+                                    <div style={{ color: 'var(--zinc-200)', fontSize: '16px', lineHeight: '1.85', letterSpacing: '-0.01em', fontWeight: 450, whiteSpace: 'pre-wrap' }}>
                                         {aiData.explanation || aiData.analysis || aiData.summary}
                                     </div>
+
+                                    {/* Scanline Effect */}
+                                    <motion.div 
+                                        initial={{ top: '-10%' }}
+                                        animate={{ top: '110%' }}
+                                        transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                                        style={{ position: 'absolute', left: 0, right: 0, height: '1px', background: 'linear-gradient(to right, transparent, var(--accent-indigo)20, transparent)', pointerEvents: 'none' }}
+                                    />
                                 </div>
                             )}
                             
