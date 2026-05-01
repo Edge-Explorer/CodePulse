@@ -250,7 +250,6 @@ const Dashboard = () => {
           {/* Stats Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '48px' }}>
             <StatCard icon={<FiSearch size={18} />} label="Total Repositories" value={projects.length.toString()} trend="Active" color="var(--accent-indigo)" delay={0.1} />
-            <StatCard icon={<FiZap size={18} />} label="System Status" value="Online" trend="Stable" color="var(--success-green)" delay={0.2} />
           </div>
 
           {/* Repositories Table */}
@@ -275,7 +274,6 @@ const Dashboard = () => {
                       <thead>
                         <tr style={{ borderBottom: '1px solid var(--border-subtle)', background: 'rgba(255,255,255,0.01)' }}>
                             <th style={{ padding: '14px 24px', fontSize: '11px', fontWeight: 700, color: 'var(--zinc-500)', textTransform: 'uppercase' }}>Identity</th>
-                            <th style={{ padding: '14px 24px', fontSize: '11px', fontWeight: 700, color: 'var(--zinc-500)', textTransform: 'uppercase' }}>Status</th>
                             <th style={{ padding: '14px 24px', fontSize: '11px', fontWeight: 700, color: 'var(--zinc-500)', textTransform: 'uppercase' }}>Stack</th>
                             <th style={{ padding: '14px 24px' }}></th>
                         </tr>
@@ -292,12 +290,6 @@ const Dashboard = () => {
                                 <td style={{ padding: '20px 24px' }}>
                                     <div style={{ fontWeight: 600, color: 'white', fontSize: '14px' }}>{item.name}</div>
                                     <div style={{ fontSize: '11px', color: 'var(--zinc-500)', fontFamily: 'monospace' }}>{item.repo_url.replace('https://github.com/', '')}</div>
-                                </td>
-                                <td style={{ padding: '20px 24px' }}>
-                                    <div className="status-pill" style={{ background: 'rgba(34, 197, 94, 0.08)', color: 'var(--success-green)' }}>
-                                        <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'currentColor' }} />
-                                        Healthy
-                                    </div>
                                 </td>
                                 <td style={{ padding: '20px 24px' }}>
                                     <span style={{ fontSize: '11px', padding: '4px 8px', borderRadius: '4px', background: 'var(--zinc-800)', color: 'var(--zinc-400)', fontWeight: 700 }}>
