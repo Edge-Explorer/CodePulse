@@ -422,12 +422,84 @@ const Dashboard = () => {
         );
     }
 
+    if (view === 'projects') {
+        return (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+                <header style={{ marginBottom: '48px' }}>
+                    <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', letterSpacing: '-0.02em', marginBottom: '8px' }}>Project Portfolio</h2>
+                    <p style={{ color: 'var(--zinc-500)', fontSize: '14px' }}>Manage and monitor your decentralized repository intelligence.</p>
+                </header>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
+                    {projects.map((project, index) => (
+                        <motion.div 
+                            key={project.id}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: index * 0.05 }}
+                            whileHover={{ y: -5 }}
+                            className="pro-card"
+                            style={{ padding: '32px', position: 'relative', display: 'flex', flexDirection: 'column', height: '220px', justifyContent: 'space-between' }}
+                        >
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', display: 'grid', placeItems: 'center', color: 'var(--accent-indigo)' }}>
+                                        <FiCode size={24} />
+                                    </div>
+                                    <button 
+                                        onClick={(e) => handleDeleteProject(e, project.id)}
+                                        style={{ background: 'none', border: 'none', color: 'var(--zinc-700)', cursor: 'pointer', transition: 'color 0.2s' }}
+                                        onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                                        onMouseOut={(e) => e.currentTarget.style.color = 'var(--zinc-700)'}
+                                    >
+                                        <FiTrash2 size={18} />
+                                    </button>
+                                </div>
+                                <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'white', marginBottom: '4px' }}>{project.name}</h3>
+                                <div style={{ fontSize: '11px', color: 'var(--zinc-500)', fontFamily: 'monospace', letterSpacing: '0.02em' }}>
+                                    {project.repo_url.replace('https://github.com/', '')}
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ fontSize: '10px', padding: '4px 10px', borderRadius: '4px', background: 'var(--zinc-800)', color: 'var(--zinc-400)', fontWeight: 700, textTransform: 'uppercase' }}>
+                                    {project.language || 'Audit Engine'}
+                                </span>
+                                <button 
+                                    onClick={() => handleProjectClick(project)}
+                                    style={{ 
+                                        background: 'none', border: 'none', color: 'white', fontSize: '12px', fontWeight: 700, 
+                                        cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', padding: '0'
+                                    }}
+                                >
+                                    View Analysis <FiChevronRight size={16} />
+                                </button>
+                            </div>
+                        </motion.div>
+                    ))}
+                    
+                    {/* Add Project Prompt Card */}
+                    <motion.div 
+                        onClick={() => setShowAddModal(true)}
+                        whileHover={{ borderColor: 'var(--accent-indigo)' }}
+                        style={{ 
+                            padding: '32px', border: '2px dashed var(--border-subtle)', borderRadius: '16px', 
+                            display: 'grid', placeItems: 'center', cursor: 'pointer', height: '220px', transition: 'all 0.3s' 
+                        }}
+                    >
+                        <div style={{ textAlign: 'center' }}>
+                            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', display: 'grid', placeItems: 'center', margin: '0 auto 16px', color: 'var(--zinc-500)' }}>
+                                <FiPlus size={20} />
+                            </div>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--zinc-500)' }}>Initialize New Repository</span>
+                        </div>
+                    </motion.div>
+                </div>
+            </motion.div>
+        );
+    }
+
     return (
-        <div style={{ padding: '48px', textAlign: 'center', color: 'var(--zinc-500)', border: '1px dashed var(--border-strong)', borderRadius: '12px' }}>
-            <h2 style={{ color: 'white', marginBottom: '12px' }}>{view.charAt(0).toUpperCase() + view.slice(1)} View</h2>
-            <p>Connection to real-time {view} data established. Awaiting detailed component rendering.</p>
-        </div>
-    );
   };
 
   return (
