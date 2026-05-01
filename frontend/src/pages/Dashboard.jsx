@@ -346,6 +346,82 @@ const Dashboard = () => {
       );
     }
     
+    if (view === 'history') {
+        return (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+                <div style={{ position: 'relative', paddingLeft: '32px', marginTop: '12px' }}>
+                    {/* Timeline Line */}
+                    <div style={{ position: 'absolute', left: '7px', top: '0', bottom: '0', width: '1px', background: 'linear-gradient(to bottom, var(--accent-indigo), transparent)' }} />
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        {projects.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((project, index) => (
+                            <motion.div 
+                                key={project.id}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                className="pro-card"
+                                style={{ padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}
+                            >
+                                {/* Timeline Node */}
+                                <div style={{ 
+                                    position: 'absolute', 
+                                    left: '-32.5px', 
+                                    top: '50%', 
+                                    transform: 'translateY(-50%)',
+                                    width: '12px', 
+                                    height: '12px', 
+                                    borderRadius: '50%', 
+                                    background: 'var(--bg-main)',
+                                    border: '2px solid var(--accent-indigo)',
+                                    boxShadow: '0 0 10px var(--accent-indigo)'
+                                }} />
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', display: 'grid', placeItems: 'center', color: 'var(--accent-indigo)' }}>
+                                        <FiCode size={18} />
+                                    </div>
+                                    <div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+                                            <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'white' }}>{project.name}</h3>
+                                            <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)', color: 'var(--zinc-500)', border: '1px solid var(--border-subtle)', fontFamily: 'monospace' }}>
+                                                {project.language || 'Audit'}
+                                            </span>
+                                        </div>
+                                        <div style={{ fontSize: '11px', color: 'var(--zinc-500)', fontFamily: 'monospace' }}>
+                                            Analysis completed on {new Date(project.created_at).toLocaleString()}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button 
+                                    onClick={() => handleProjectClick(project)}
+                                    style={{ 
+                                        padding: '8px 16px', 
+                                        background: 'rgba(255,255,255,0.03)', 
+                                        border: '1px solid var(--border-subtle)', 
+                                        borderRadius: '6px', 
+                                        color: 'white', 
+                                        fontSize: '11px', 
+                                        fontWeight: 700, 
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.05em'
+                                    }}
+                                    onMouseEnter={(e) => { e.target.style.background = 'white'; e.target.style.color = 'black'; }}
+                                    onMouseLeave={(e) => { e.target.style.background = 'rgba(255,255,255,0.03)'; e.target.style.color = 'white'; }}
+                                >
+                                    View Intel
+                                </button>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </motion.div>
+        );
+    }
+
     return (
         <div style={{ padding: '48px', textAlign: 'center', color: 'var(--zinc-500)', border: '1px dashed var(--border-strong)', borderRadius: '12px' }}>
             <h2 style={{ color: 'white', marginBottom: '12px' }}>{view.charAt(0).toUpperCase() + view.slice(1)} View</h2>
