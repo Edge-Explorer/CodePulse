@@ -499,8 +499,13 @@ const Dashboard = () => {
         );
     }
 
-    return (
-  };
+        return (
+            <div style={{ padding: '48px', textAlign: 'center', color: 'var(--zinc-500)', border: '1px dashed var(--border-strong)', borderRadius: '12px' }}>
+                <h2 style={{ color: 'white', marginBottom: '12px' }}>{view.charAt(0).toUpperCase() + view.slice(1)} View</h2>
+                <p>Connection to real-time {view} data established. Awaiting detailed component rendering.</p>
+            </div>
+        );
+    };
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-main)', position: 'relative', overflow: 'hidden' }}>
