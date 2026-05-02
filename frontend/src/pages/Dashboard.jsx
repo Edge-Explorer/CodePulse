@@ -422,6 +422,76 @@ const Dashboard = () => {
         );
     }
 
+    if (view === 'security') {
+        return (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+                <header style={{ marginBottom: '48px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                    <div>
+                        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', letterSpacing: '-0.02em', marginBottom: '8px' }}>Security Ops Center</h2>
+                        <p style={{ color: 'var(--zinc-500)', fontSize: '14px' }}>Real-time vulnerability monitoring and threat intelligence across all nodes.</p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                        <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#ef4444', fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}>
+                            3 Critical Threats
+                        </div>
+                    </div>
+                </header>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    {/* Placeholder Threat Feed - In a real app, this would aggregate from all projects */}
+                    {[
+                        { project: 'Karma-AI', type: 'Hardcoded Secret', severity: 'CRITICAL', file: '.env', desc: 'Plaintext API keys detected in version-controlled environment configuration.' },
+                        { project: 'Edge-Explorer', type: 'JWT Vulnerability', severity: 'HIGH', file: 'auth.py', desc: 'Weak signing secret detected in authentication middleware implementation.' },
+                        { project: 'CodePulse', type: 'Prototype Pollution', severity: 'MEDIUM', file: 'utils.js', desc: 'Potential object prototype manipulation vulnerability in deep-merge utility.' }
+                    ].map((threat, i) => (
+                        <motion.div 
+                            key={i}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className="pro-card"
+                            style={{ 
+                                padding: '24px', 
+                                borderLeft: `4px solid ${threat.severity === 'CRITICAL' ? '#ef4444' : threat.severity === 'HIGH' ? '#f59e0b' : '#3b82f6'}`,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                                <div style={{ 
+                                    width: '40px', height: '40px', borderRadius: '8px', 
+                                    background: `${threat.severity === 'CRITICAL' ? '#ef4444' : threat.severity === 'HIGH' ? '#f59e0b' : '#3b82f6'}10`,
+                                    border: `1px solid ${threat.severity === 'CRITICAL' ? '#ef4444' : threat.severity === 'HIGH' ? '#f59e0b' : '#3b82f6'}30`,
+                                    display: 'grid', placeItems: 'center', color: threat.severity === 'CRITICAL' ? '#ef4444' : threat.severity === 'HIGH' ? '#f59e0b' : '#3b82f6'
+                                }}>
+                                    <FiShield size={20} />
+                                </div>
+                                <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
+                                        <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'white' }}>{threat.type}</h3>
+                                        <span style={{ fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)', color: 'var(--zinc-500)' }}>{threat.project}</span>
+                                    </div>
+                                    <p style={{ fontSize: '13px', color: 'var(--zinc-400)', maxWidth: '600px' }}>{threat.desc}</p>
+                                </div>
+                            </div>
+
+                            <div style={{ textAlign: 'right' }}>
+                                <div style={{ 
+                                    fontSize: '10px', fontWeight: 900, color: threat.severity === 'CRITICAL' ? '#ef4444' : threat.severity === 'HIGH' ? '#f59e0b' : '#3b82f6', 
+                                    textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' 
+                                }}>
+                                    {threat.severity}
+                                </div>
+                                <div style={{ fontSize: '11px', color: 'var(--zinc-600)', fontFamily: 'monospace' }}>LOC: {threat.file}</div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </motion.div>
+        );
+    }
+
     if (view === 'projects') {
         return (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
