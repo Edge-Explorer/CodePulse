@@ -492,78 +492,92 @@ const Dashboard = () => {
         );
     }
 
-    if (view === 'projects') {
+    if (view === 'settings') {
         return (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <header style={{ marginBottom: '48px' }}>
-                    <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', letterSpacing: '-0.02em', marginBottom: '8px' }}>Project Portfolio</h2>
-                    <p style={{ color: 'var(--zinc-500)', fontSize: '14px' }}>Manage and monitor your decentralized repository intelligence.</p>
+                    <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', letterSpacing: '-0.02em', marginBottom: '8px' }}>System Configuration</h2>
+                    <p style={{ color: 'var(--zinc-500)', fontSize: '14px' }}>Calibrate the intelligence engine and interface parameters.</p>
                 </header>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
-                    {projects.map((project, index) => (
-                        <motion.div 
-                            key={project.id}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.05 }}
-                            whileHover={{ y: -5 }}
-                            className="pro-card"
-                            style={{ padding: '32px', position: 'relative', display: 'flex', flexDirection: 'column', height: '220px', justifyContent: 'space-between' }}
-                        >
-                            <div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', display: 'grid', placeItems: 'center', color: 'var(--accent-indigo)' }}>
-                                        <FiCode size={24} />
-                                    </div>
-                                    <button 
-                                        onClick={(e) => handleDeleteProject(e, project.id)}
-                                        style={{ background: 'none', border: 'none', color: 'var(--zinc-700)', cursor: 'pointer', transition: 'color 0.2s' }}
-                                        onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
-                                        onMouseOut={(e) => e.currentTarget.style.color = 'var(--zinc-700)'}
-                                    >
-                                        <FiTrash2 size={18} />
-                                    </button>
-                                </div>
-                                <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'white', marginBottom: '4px' }}>{project.name}</h3>
-                                <div style={{ fontSize: '11px', color: 'var(--zinc-500)', fontFamily: 'monospace', letterSpacing: '0.02em' }}>
-                                    {project.repo_url.replace('https://github.com/', '')}
-                                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '32px' }}>
+                    {/* Intelligence Engine Section */}
+                    <div className="pro-card" style={{ padding: '32px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+                            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.1)', border: '1px solid rgba(99, 102, 241, 0.2)', display: 'grid', placeItems: 'center', color: 'var(--accent-indigo)' }}>
+                                <FiZap size={20} />
                             </div>
-
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '10px', padding: '4px 10px', borderRadius: '4px', background: 'var(--zinc-800)', color: 'var(--zinc-400)', fontWeight: 700, textTransform: 'uppercase' }}>
-                                    {project.language || 'Audit Engine'}
-                                </span>
-                                <button 
-                                    onClick={() => handleProjectClick(project)}
-                                    style={{ 
-                                        background: 'none', border: 'none', color: 'white', fontSize: '12px', fontWeight: 700, 
-                                        cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', padding: '0'
-                                    }}
-                                >
-                                    View Analysis <FiChevronRight size={16} />
-                                </button>
-                            </div>
-                        </motion.div>
-                    ))}
-                    
-                    {/* Add Project Prompt Card */}
-                    <motion.div 
-                        onClick={() => setShowAddModal(true)}
-                        whileHover={{ borderColor: 'var(--accent-indigo)' }}
-                        style={{ 
-                            padding: '32px', border: '2px dashed var(--border-subtle)', borderRadius: '16px', 
-                            display: 'grid', placeItems: 'center', cursor: 'pointer', height: '220px', transition: 'all 0.3s' 
-                        }}
-                    >
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', display: 'grid', placeItems: 'center', margin: '0 auto 16px', color: 'var(--zinc-500)' }}>
-                                <FiPlus size={20} />
-                            </div>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--zinc-500)' }}>Initialize New Repository</span>
+                            <h3 style={{ color: 'white', fontWeight: 700 }}>Intelligence Engine</h3>
                         </div>
-                    </motion.div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <div style={{ color: 'var(--zinc-200)', fontSize: '14px', fontWeight: 600 }}>Analysis Model</div>
+                                    <div style={{ color: 'var(--zinc-500)', fontSize: '11px' }}>Gemini 2.0 Flash (Recommended)</div>
+                                </div>
+                                <select style={{ background: 'var(--zinc-900)', border: '1px solid var(--border-subtle)', color: 'white', padding: '6px 12px', borderRadius: '6px', fontSize: '12px' }}>
+                                    <option>Gemini 2.0 Flash</option>
+                                    <option>Gemini 1.5 Pro</option>
+                                    <option>Custom Engine</option>
+                                </select>
+                            </div>
+                            <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '20px' }}>
+                                <div style={{ color: 'var(--zinc-200)', fontSize: '14px', fontWeight: 600, marginBottom: '8px' }}>Detection Sensitivity</div>
+                                <input type="range" style={{ width: '100%', accentColor: 'var(--accent-indigo)' }} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Interface Calibration Section */}
+                    <div className="pro-card" style={{ padding: '32px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+                            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.2)', display: 'grid', placeItems: 'center', color: '#A855F7' }}>
+                                <FiLayers size={20} />
+                            </div>
+                            <h3 style={{ color: 'white', fontWeight: 700 }}>Interface Calibration</h3>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <div style={{ color: 'var(--zinc-200)', fontSize: '14px', fontWeight: 600 }}>Atmospheric Effects</div>
+                                    <div style={{ color: 'var(--zinc-500)', fontSize: '11px' }}>Toggle full-page 3D background shader</div>
+                                </div>
+                                <div style={{ width: '40px', height: '20px', borderRadius: '20px', background: 'var(--accent-indigo)', position: 'relative', cursor: 'pointer' }}>
+                                    <div style={{ position: 'absolute', right: '2px', top: '2px', width: '16px', height: '16px', borderRadius: '50%', background: 'white' }} />
+                                </div>
+                            </div>
+                            <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <div style={{ color: 'var(--zinc-200)', fontSize: '14px', fontWeight: 600 }}>Primary Accent</div>
+                                    <div style={{ color: 'var(--zinc-500)', fontSize: '11px' }}>Current: Indigo (Default)</div>
+                                </div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <div style={{ width: '16px', height: '16px', borderRadius: '4px', background: '#6366F1' }} />
+                                    <div style={{ width: '16px', height: '16px', borderRadius: '4px', background: '#A855F7' }} />
+                                    <div style={{ width: '16px', height: '16px', borderRadius: '4px', background: '#10B981' }} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Security Vault Section */}
+                    <div className="pro-card" style={{ padding: '32px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+                            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', display: 'grid', placeItems: 'center', color: '#ef4444' }}>
+                                <FiLock size={20} />
+                            </div>
+                            <h3 style={{ color: 'white', fontWeight: 700 }}>Security Vault</h3>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div>
+                                <div style={{ color: 'var(--zinc-200)', fontSize: '14px', fontWeight: 600, marginBottom: '8px' }}>Personal Access Token</div>
+                                <input type="password" value="************************" readOnly style={{ width: '100%', padding: '10px', borderRadius: '8px', background: 'var(--zinc-950)', border: '1px solid var(--border-subtle)', color: 'var(--zinc-500)', fontSize: '12px' }} />
+                            </div>
+                            <button style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', background: 'transparent', color: 'white', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                                Update Credentials
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </motion.div>
         );
