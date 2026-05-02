@@ -86,10 +86,15 @@ const Sidebar = ({ view, setView, isOpen }) => {
 
       {/* Footer Actions */}
       <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '4px', borderTop: '1px solid var(--border-subtle)', paddingTop: '24px' }}>
-        <button style={{ 
+        <button 
+          onClick={() => setView('settings')}
+          style={{ 
             display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', border: 'none', 
-            background: 'transparent', color: 'var(--zinc-400)', cursor: 'pointer', fontSize: '13px', fontWeight: 500 
-        }}>
+            background: 'transparent', color: view === 'settings' ? 'white' : 'var(--zinc-400)', cursor: 'pointer', fontSize: '13px', fontWeight: 500 
+          }}
+          onMouseOver={(e) => { e.currentTarget.style.color = 'white'; }}
+          onMouseOut={(e) => { if(view !== 'settings') e.currentTarget.style.color = 'var(--zinc-400)'; }}
+        >
           <FiSettings size={18} />
           {isOpen && <span>Settings</span>}
         </button>
