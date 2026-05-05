@@ -12,14 +12,24 @@ logging.basicConfig(level= logging.INFO)
 async def consume():
     # 1. Initialize the Scanner with the API KEY
     scanner= AIScanner(api_key= settings.GEMINI_API_KEY)
-    consumer= AIOKafkaConsumer(
-        "project_scans",
-        bootstrap_servers= settings.KAFKA_BOOTSTRAP_SERVERS,
-        group_id= "scan_workers",
-        value_deserializer= lambda m: json.loads(m.decode('utf-8')),
-        max_poll_interval_ms= 600000, # Wait up to 10 mins for AI to finish
-        session_timeout_ms= 60000      # Heartbeat timeout
-    )
+    consumer_config = {
+        "bootstrap_servers": settings.KAFKA_BOOTSTRAP_SERVERS,
+        "group_id": "scan_workers",
+        "value_deserializer": lambda m: json.loads(m.decode('utf-8')),
+        "max_poll_interval_ms": 600000,
+        "session_timeout_ms": 60000
+    }
+
+    # Add Cloud Authentication if credentials exist
+    if settings.KAFKA_SASL_USERNAME:
+        consumer_config.update({
+            "security_protocol": "SASL_SSL",
+            "sasl_mechanism": "SCRAM-SHA-256",
+            "sasl_plain_username": settings.KAFKA_SASL_USERNAME,
+            "sasl_plain_password": settings.KAFKA_SASL_PASSWORD
+        })
+
+    consumer = AIOKafkaConsumer("project_scans", **consumer_config)
 
     await consumer.start()
     logging.info("AI Worker is LIVE and listening for tasks...")

@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "dev_secret_key_change_in_production"
     JWT_ALGORITHM: str = "HS256"
     KAFKA_BOOTSTRAP_SERVERS: str = "localhost:9092"
+    KAFKA_SASL_USERNAME: str = ""
+    KAFKA_SASL_PASSWORD: str = ""
 
     SMTP_SERVER: str = "smtp.gmail.com"
     SMTP_PORT: int = 587
