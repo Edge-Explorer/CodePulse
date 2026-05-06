@@ -18,11 +18,13 @@ const Dashboard = () => {
   const [reportData, setReportData] = useState(null);
   const [reportLoading, setReportLoading] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
   const fetchProjects = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/projects/', {
+      const response = await fetch(`${apiUrl}/projects/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -40,7 +42,7 @@ const Dashboard = () => {
     try {
       setReportLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:8000/projects/${projectId}/report`, {
+      const response = await fetch(`${apiUrl}/projects/${projectId}/report`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -82,7 +84,7 @@ const Dashboard = () => {
     setIsSubmitting(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/projects/', {
+      const response = await fetch(`${apiUrl}/projects/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

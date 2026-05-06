@@ -12,7 +12,8 @@ const AppContent = () => {
     if (isAuthenticated) {
       navigate('/dashboard');
     } else {
-      window.location.href = 'http://localhost:8000/auth/github/login';
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      window.location.href = `${apiUrl}/auth/github/login`;
     }
   };
 
